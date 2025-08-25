@@ -1,3 +1,2 @@
 # flutter_appdev
-
-A new Flutter project.
+Flutter project and activities for DCSN06C
