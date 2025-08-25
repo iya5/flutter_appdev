@@ -1,2 +1,7 @@
-# flutter_appdev
-Flutter project and activities for DCSN06C
+# Flutter School Activities
+
+My flutter project and activities for uni
+
+## Documentations
+
+[Official Flutter Documentations](https://docs.flutter.dev)
