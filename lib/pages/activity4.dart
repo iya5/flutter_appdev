@@ -6,7 +6,7 @@ class Activity4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.green,
       appBar: AppBar(
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -20,7 +20,7 @@ class Activity4 extends StatelessWidget {
             ),
           ],
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
         toolbarHeight: 80,
         toolbarOpacity: 0.5,
       ),

@@ -69,7 +69,7 @@ class Homepage extends StatelessWidget {
               children: [
                 ActivityCard(
                   "Activity 1",
-                  Colors.blue,
+                  Colors.red,
                   () => Activity1(),
                 ),
                 ActivityCard(
@@ -84,7 +84,7 @@ class Homepage extends StatelessWidget {
                 ),
                 ActivityCard(
                   "Activity 4", 
-                  Colors.red,
+                  Colors.green,
                   () => Activity4()
                 ), 
               ],
@@ -109,7 +109,7 @@ class ActivityCard extends StatelessWidget{
     return LayoutBuilder(
       builder: (context, constraints) {
         // won't render the card if it's too small
-        if (constraints.maxWidth < 140 || constraints.maxHeight < 90) {
+        if (constraints.maxWidth < 100 || constraints.maxHeight < 90) {
           return const SizedBox(); 
         }
 
