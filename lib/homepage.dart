@@ -5,10 +5,6 @@ import 'package:flutter_appdev/pages/activity3.dart';
 import 'package:flutter_appdev/pages/activity4.dart';
 //import 'package:flutter_appdev/components/cards.dart';
 
-void main() {
-  runApp(const Homepage(title: 'Homepage',));
-}
-
 class Homepage extends StatelessWidget {
   const Homepage({super.key, required String title});
 
