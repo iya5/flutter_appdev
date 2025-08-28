@@ -21,22 +21,61 @@ class Homepage extends StatelessWidget {
       home: Scaffold(
         backgroundColor: const Color.fromARGB(255,17,191,255),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color.fromARGB(255,17,191,255),
+          toolbarHeight: 150,
+          toolbarOpacity: 0.5,
           title: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('App Development',
-                    style: TextStyle(color: Colors.white),
+              Row(
+                children: [
+                  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Builder(
+                    builder: (context) {
+                      return IconButton(
+                        icon: const Icon(Icons.menu, color: Colors.white),
+                        onPressed: () => Scaffold.of(context).openDrawer(),
+                      );
+                    },
+                  ),
+                  ),
+                  Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                    icon: const Icon(Icons.settings, color: Colors.white),
+                    onPressed: () {
+                      print("Settings tapped");
+                    },
+                  ),
+                  ),
+                ],
               ),
-              const Divider(color: Color.fromARGB(255,17,191,255)),
-              Text('C - CS302',
-                    style: TextStyle(color: Colors.white,fontSize: 14.0, fontStyle: FontStyle.italic),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'App Development',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'C - CS302',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.0,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-          backgroundColor: const Color.fromARGB(255,17,191,255),
-          toolbarHeight: 120,
-          toolbarOpacity: 0.5,
         ),
 
       /************
@@ -99,7 +138,7 @@ class ActivityCard extends StatelessWidget{
   final Widget Function() activityLink;
 
   const ActivityCard(this.name, this.cardColor, this.activityLink, {super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -116,8 +155,9 @@ class ActivityCard extends StatelessWidget{
           borderRadius: BorderRadius.circular(20.0),
         ),
         margin: EdgeInsets.all(16.0),
+
         
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
           splashColor: Colors.white.withAlpha(30),
           onTap: () {
@@ -135,7 +175,6 @@ class ActivityCard extends StatelessWidget{
 
         ),
       );
-
     }
     );
   }
