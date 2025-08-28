@@ -144,9 +144,9 @@ class ActivityCard extends StatelessWidget{
     return LayoutBuilder(
       builder: (context, constraints) {
         // won't render the card if it's too small
-        if (constraints.maxWidth < 100 || constraints.maxHeight < 90) {
-          return const SizedBox(); 
-        }
+        //if (constraints.maxWidth < 100 || constraints.maxHeight < 90) {
+        //  return const SizedBox(); 
+        //}
 
       return Card(
         elevation: 8,
