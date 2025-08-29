@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
 
-class ActivityCard extends StatelessWidget{
-  final String name;
+class ActivityCard extends StatelessWidget {
+  final String actTitle, subtitle;
   final Color cardColor;
   final Widget Function() activityLink;
 
-  const ActivityCard(this.name, this.cardColor, this.activityLink, {super.key});
-  
+  const ActivityCard(
+    this.actTitle,
+    this.subtitle,
+    this.cardColor,
+    this.activityLink, {
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      //width: 500,    // fixed width
-      //height: 150,  // fixed height
       child: Card(
         elevation: 8,
         color: cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
-        margin: EdgeInsets.all(16.0),
-
-        
+        margin: const EdgeInsets.all(16.0),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           splashColor: Colors.white.withAlpha(30),
@@ -28,38 +30,58 @@ class ActivityCard extends StatelessWidget{
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                  activityLink()));
+                builder: (context) => activityLink(),
+              ),
+            );
           },
 
-        child: Padding(
-          padding: EdgeInsetsGeometry.all(16.5),
-          child: Column (
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Image.asset(
-                  'assets/sample.jpg',
-                  fit: BoxFit.contain,
-                ),
-              ),
-              Text(
-                name,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,),
-              ),
-              Text(
-                "subtitle",
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12,),
-              )
-            ],
-          ), 
-          
-        )
 
+          child: Padding(
+            padding: const EdgeInsets.all(16.5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                Container(
+                  width: 140,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/bee.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 5),
+                      Text(
+                        actTitle,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              ],
+
+              
+            ),
+          ),
         ),
       ),
     );

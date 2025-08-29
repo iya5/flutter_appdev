@@ -99,21 +99,25 @@ class Homepage extends StatelessWidget {
               children: [
                 ActivityCard(
                   "Activity 1",
+                  "halo halo",
                   Colors.red,
                   () => Activity1(),
                 ),
                 ActivityCard(
-                  "Activity 2", 
+                  "Activity 2",
+                  "wow",
                   Colors.purple,
                   () => Activity2()
                 ),
                 ActivityCard(
-                  "Activity 3", 
+                  "Activity 3",
+                  "hallaw",
                   Colors.orange,
                   () => Activity3()
                 ),
                 ActivityCard(
                   "Activity 4", 
+                  "shimi shimi",
                   Colors.green,
                   () => Activity4()
                 ), 
