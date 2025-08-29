@@ -3,7 +3,7 @@ import 'package:flutter_appdev/pages/activity1.dart';
 import 'package:flutter_appdev/pages/activity2.dart';
 import 'package:flutter_appdev/pages/activity3.dart';
 import 'package:flutter_appdev/pages/activity4.dart';
-//import 'package:flutter_appdev/components/cards.dart';
+import 'package:flutter_appdev/components/activitycards.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key, required String title});
@@ -23,35 +23,31 @@ class Homepage extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: const Color.fromARGB(255,17,191,255),
-          toolbarHeight: 150,
+          toolbarHeight: 160,
           toolbarOpacity: 0.5,
           title: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Builder(
-                    builder: (context) {
-                      return IconButton(
-                        icon: const Icon(Icons.menu, color: Colors.white),
-                        onPressed: () => Scaffold.of(context).openDrawer(),
-                      );
-                    },
-                  ),
-                  ),
-                  Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: IconButton(
-                    icon: const Icon(Icons.settings, color: Colors.white),
-                    onPressed: () {
-                      print("Settings tapped");
-                    },
-                  ),
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.menu, color: Colors.white),
+                      onPressed: () {
+                        print("Drawer tapped");
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.settings, color: Colors.white),
+                      onPressed: () {
+                        print("Settings tapped");
+                      },
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 35.0),
@@ -77,7 +73,6 @@ class Homepage extends StatelessWidget {
             ],
           ),
         ),
-
       /************
       *****BODY****
       *************/
@@ -132,50 +127,3 @@ class Homepage extends StatelessWidget {
   }
 }
 
-class ActivityCard extends StatelessWidget{
-  final String name;
-  final Color cardColor;
-  final Widget Function() activityLink;
-
-  const ActivityCard(this.name, this.cardColor, this.activityLink, {super.key});
-  
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // won't render the card if it's too small
-        //if (constraints.maxWidth < 100 || constraints.maxHeight < 90) {
-        //  return const SizedBox(); 
-        //}
-
-      return Card(
-        elevation: 8,
-        color: cardColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        margin: EdgeInsets.all(16.0),
-
-        
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          splashColor: Colors.white.withAlpha(30),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                  activityLink()));
-          },
-
-        child: Padding(
-          padding: EdgeInsetsGeometry.all(16.5),
-          child: Text(name,style: TextStyle(color: Colors.white),),
-        )
-
-        ),
-      );
-    }
-    );
-  }
-}
