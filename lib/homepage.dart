@@ -23,7 +23,7 @@ class Homepage extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: const Color.fromARGB(255,17,191,255),
-          toolbarHeight: 160,
+          toolbarHeight: 190,
           toolbarOpacity: 0.5,
           title: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -50,13 +50,13 @@ class Homepage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
                     Text(
                       'App Development',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.white, fontSize: 28),
                     ),
                     SizedBox(height: 4),
                     Text(
@@ -91,8 +91,8 @@ class Homepage extends StatelessWidget {
 
           child: Center(
             child: GridView.extent(
-              padding: const EdgeInsets.all(10),
-              maxCrossAxisExtent: 240,
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              maxCrossAxisExtent: 500,
               childAspectRatio: 1.5,
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,

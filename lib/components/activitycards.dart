@@ -9,14 +9,10 @@ class ActivityCard extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // won't render the card if it's too small
-        //if (constraints.maxWidth < 100 || constraints.maxHeight < 90) {
-        //  return const SizedBox(); 
-        //}
-
-      return Card(
+    return SizedBox(
+      //width: 500,    // fixed width
+      //height: 150,  // fixed height
+      child: Card(
         elevation: 8,
         color: cardColor,
         shape: RoundedRectangleBorder(
@@ -38,12 +34,34 @@ class ActivityCard extends StatelessWidget{
 
         child: Padding(
           padding: EdgeInsetsGeometry.all(16.5),
-          child: Text(name,style: TextStyle(color: Colors.white),),
+          child: Column (
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Image.asset(
+                  'assets/sample.jpg',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Text(
+                name,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,),
+              ),
+              Text(
+                "subtitle",
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,),
+              )
+            ],
+          ), 
+          
         )
 
         ),
-      );
-    }
+      ),
     );
   }
 }
