@@ -56,8 +56,8 @@ class _MusicPlayerState extends State<Activity1> {
     "assets/music/SAY YOU LOVE ME.mp3",
   ];
 
-  @override //docs: https://api.flutter.dev/flutter/widgets/State/initState.html
-  void initState() { //used this to play the song immediately after clicking activity
+  @override // docs: https://api.flutter.dev/flutter/widgets/State/initState.html
+  void initState() { // used this to play the song immediately after clicking activity
     super.initState();
     _currentIndex = 0;
 
@@ -76,7 +76,7 @@ class _MusicPlayerState extends State<Activity1> {
     );
   }
 
-  Future<void> _getMetadata(int index) async { //used this for showing metadata
+  Future<void> _getMetadata(int index) async { // used this for showing metadata
     Tag? tag = await AudioTags.read(songs[index]);
 
     setState(() {
@@ -91,8 +91,9 @@ class _MusicPlayerState extends State<Activity1> {
   }
   
 
-  Future<void> _playSong(int index) async { 
-    _getMetadata(_currentIndex);
+  Future<void> _playSong(int index) async {
+    // await is necessary to get metadata before rebuilding ui and playing song
+    await _getMetadata(index); 
     await _audioPlayer.stop();
     await _audioPlayer.play(AssetSource(songs[index].replaceFirst("assets/", "")));
     setState(() {
@@ -155,9 +156,9 @@ class _MusicPlayerState extends State<Activity1> {
 
     return Column (
       children: [
-        Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-        Text(artist, style: TextStyle(fontSize: 16, color: Colors.grey[700]), textAlign: TextAlign.center),
-        Text(album, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic), textAlign: TextAlign.center),
+        Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700), textAlign: TextAlign.center),
+        Text(artist, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400), textAlign: TextAlign.center),
+        Text(album, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300), textAlign: TextAlign.center),
       ],
     );
   }
@@ -267,6 +268,7 @@ class SongListPage extends StatelessWidget {
             title: Text(songName),
             onTap: () {
               onSongSelected(index);
+
               Navigator.pop(context);
             },
           );
