@@ -101,24 +101,28 @@ class Homepage extends StatelessWidget {
                   "Music Player",
                   "activity 1",
                   Colors.red,
+                  "assets/images/revefinale.jpg",
                   () => Activity1(),
                 ),
                 ActivityCard(
                   "Activity 2",
                   "wow",
                   Colors.purple,
+                  "assets/images/bee.jpg",
                   () => Activity2()
                 ),
                 ActivityCard(
                   "Activity 3",
                   "hallaw",
                   Colors.orange,
+                  "assets/images/bee.jpg",
                   () => Activity3()
                 ),
                 ActivityCard(
                   "Activity 4", 
                   "shimi shimi",
                   Colors.green,
+                  "assets/images/bee.jpg",
                   () => Activity4()
                 ), 
               ],

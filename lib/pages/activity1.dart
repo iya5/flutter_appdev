@@ -61,23 +61,33 @@ class _MusicPlayerState extends State<Activity1> {
     super.initState();
     _currentIndex = 0;
 
-    _playSong(_currentIndex);
-
+    _preload();
+    
     _audioPlayer.onPlayerComplete.listen((event) {
       _nextSong();
     });
   }
 
+  Future<void> _preload() async {
+    await _getMetadata(_currentIndex);
+
+    await _audioPlayer.setSource(
+      AssetSource((songs[_currentIndex].replaceFirst("assets/", "")))
+    );
+  }
+
   Future<void> _getMetadata(int index) async { //used this for showing metadata
     Tag? tag = await AudioTags.read(songs[index]);
 
-    songMetadata.title = tag?.title;
-    songMetadata.trackArtist = tag?.trackArtist;
-    songMetadata.album = tag?.album;
-    //songMetadata.year = tag?.year;
-    //int? duration = tag?.duration;
-    List<Picture>? pictures = tag?.pictures;
-    songMetadata.picture = pictures?[0];
+    setState(() {
+      songMetadata.title = tag?.title;
+      songMetadata.trackArtist = tag?.trackArtist;
+      songMetadata.album = tag?.album;
+      //songMetadata.year = tag?.year;
+      //int? duration = tag?.duration;
+      List<Picture>? pictures = tag?.pictures;
+      songMetadata.picture = pictures?[0];
+    });
   }
   
 

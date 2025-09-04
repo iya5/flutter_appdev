@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ActivityCard extends StatelessWidget {
-  final String actTitle, subtitle;
+  final String actTitle, subtitle, cardImage;
   final Color cardColor;
   final Widget Function() activityLink;
 
@@ -9,6 +9,7 @@ class ActivityCard extends StatelessWidget {
     this.actTitle,
     this.subtitle,
     this.cardColor,
+    this.cardImage,
     this.activityLink, {
     super.key,
   });
@@ -47,8 +48,8 @@ class ActivityCard extends StatelessWidget {
                   height: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/bee.jpg'),
+                    image: DecorationImage(
+                      image: AssetImage(cardImage),
                       fit: BoxFit.cover,
                     ),
                   ),
