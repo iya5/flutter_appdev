@@ -98,8 +98,8 @@ class Homepage extends StatelessWidget {
               mainAxisSpacing: 4,
               children: [
                 ActivityCard(
-                  "Activity 1",
-                  "halo halo",
+                  "Music Player",
+                  "activity 1",
                   Colors.red,
                   () => Activity1(),
                 ),

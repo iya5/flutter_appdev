@@ -48,7 +48,7 @@ class ActivityCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: const DecorationImage(
-                      image: AssetImage('assets/bee.jpg'),
+                      image: AssetImage('assets/images/bee.jpg'),
                       fit: BoxFit.cover,
                     ),
                   ),
