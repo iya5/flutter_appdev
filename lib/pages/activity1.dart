@@ -57,11 +57,10 @@ class _MusicPlayerState extends State<Activity1> {
   ];
 
   @override //docs: https://api.flutter.dev/flutter/widgets/State/initState.html
-  void initState() { // i used to to play 
+  void initState() { //used this to play the song immediately after clicking activity
     super.initState();
     _currentIndex = 0;
 
-    _getMetadata(_currentIndex);
     _playSong(_currentIndex);
 
     _audioPlayer.onPlayerComplete.listen((event) {
@@ -69,7 +68,7 @@ class _MusicPlayerState extends State<Activity1> {
     });
   }
 
-  Future<void> _getMetadata(int index) async { 
+  Future<void> _getMetadata(int index) async { //used this for showing metadata
     Tag? tag = await AudioTags.read(songs[index]);
 
     songMetadata.title = tag?.title;
