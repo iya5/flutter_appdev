@@ -62,7 +62,7 @@ class _MusicPlayerState extends State<Activity1> {
     _currentIndex = 0;
 
     _preload();
-    
+
     _audioPlayer.onPlayerComplete.listen((event) {
       _nextSong();
     });
@@ -262,7 +262,7 @@ class SongListPage extends StatelessWidget {
       body: ListView.builder(
         itemCount: songs.length,
         itemBuilder: (context, index) {
-          String songName = songs[index].split("/").last;
+          String songName = songs[index].split("/").last.replaceAll(".mp3", "");
           return ListTile(
             title: Text(songName),
             onTap: () {
