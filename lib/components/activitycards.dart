@@ -44,7 +44,7 @@ class ActivityCard extends StatelessWidget {
 
               children: [
                 Container(
-                  width: 200,
+                  width: 170,
                   height: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),

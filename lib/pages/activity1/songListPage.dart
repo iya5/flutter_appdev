@@ -4,7 +4,7 @@ class SongListPage extends StatelessWidget {
   final List<String> songs;
   final Function(int) onSongSelected;
 
-  SongListPage({required this.songs, required this.onSongSelected});
+  const SongListPage({super.key, required this.songs, required this.onSongSelected});
 
   @override
   Widget build(BuildContext context) {

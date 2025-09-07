@@ -8,6 +8,8 @@ import 'songListPage.dart';
 
 
 class Activity1 extends StatefulWidget {
+  const Activity1({super.key});
+
   @override
   _MusicPlayerState createState() => _MusicPlayerState();
 }

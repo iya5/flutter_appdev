@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appdev/pages/f_activity1/activity1.dart';
+import 'package:flutter_appdev/pages/activity1/activity1.dart';
 import 'package:flutter_appdev/pages/activity2.dart';
 import 'package:flutter_appdev/pages/activity3.dart';
 import 'package:flutter_appdev/pages/activity4.dart';
@@ -88,46 +88,62 @@ class Homepage extends StatelessWidget {
               ),
             ),
           ),
-
-          child: Center(
-            child: GridView.extent(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              maxCrossAxisExtent: 500,
-              childAspectRatio: 2.0,
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-              children: [
-                ActivityCard(
-                  "Music Player",
-                  "activity 1",
-                  Color(0xFFD60017),
-                  "assets/images/revefinale.jpg",
-                  () => Activity1(),
+          child: Column(
+            children: [
+              Text(
+                'App Development',
+                style: TextStyle(color: Colors.white, fontSize: 28),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'C - CS302',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w400,
                 ),
-                ActivityCard(
-                  "Activity 2",
-                  "wow",
-                  Colors.purple,
-                  "assets/images/bee.jpg",
-                  () => Activity2()
-                ),
-                ActivityCard(
-                  "Activity 3",
-                  "hallaw",
-                  Colors.orange,
-                  "assets/images/bee.jpg",
-                  () => Activity3()
-                ),
-                ActivityCard(
-                  "Activity 4", 
-                  "shimi shimi",
-                  Colors.green,
-                  "assets/images/bee.jpg",
-                  () => Activity4()
+              ),
+              Container(
+                child: GridView.extent(
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  maxCrossAxisExtent: 500,
+                  childAspectRatio: 2.0,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
+                  children: [
+                    ActivityCard(
+                      "Music Player",
+                      "activity 1",
+                      Color(0xFFD60017),
+                      "assets/images/revefinale.jpg",
+                      () => Activity1(),
+                    ),
+                    ActivityCard(
+                      "Activity 2",
+                      "wow",
+                      Colors.purple,
+                      "assets/images/bee.jpg",
+                      () => Activity2()
+                    ),
+                    ActivityCard(
+                      "Activity 3",
+                      "hallaw",
+                      Colors.orange,
+                      "assets/images/bee.jpg",
+                      () => Activity3()
+                    ),
+                    ActivityCard(
+                      "Activity 4", 
+                      "shimi shimi",
+                      Colors.green,
+                      "assets/images/bee.jpg",
+                      () => Activity4()
+                    ), 
+                  ],
                 ), 
-              ],
-            ),
-          )
+              ),
+            ],
+          ),
 
         ),
       ),
