@@ -162,8 +162,8 @@ class _MusicPlayerState extends State<Activity1> {
     }
     return Image.memory(
       songMetadata.picture!.bytes,
-      width: 400,
-      height: 400,
+      width: 500,
+      height: 500,
       fit: BoxFit.cover
     );
   }
@@ -176,13 +176,51 @@ class _MusicPlayerState extends State<Activity1> {
 
     String album = (songMetadata.album == null) ? "Unknown Album" : songMetadata.album!;
 
-    return Column (
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
-        Text(artist, style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.center),
-        Text(album, style: TextStyle(color: Colors.white54, fontSize: 12, fontWeight: FontWeight.w200), textAlign: TextAlign.center),
+        Text(
+          title,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        SizedBox(height: 4), 
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              artist,
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 15,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            Text(
+              " - ",
+              style: TextStyle(
+                color: Colors.white54,
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            Text(
+              album,
+              style: TextStyle(
+                color: Colors.white54,
+                fontSize: 14,
+                fontWeight: FontWeight.w200,
+              ),
+            ),
+          ],
+        ),
       ],
     );
+
   }
 
 
@@ -192,7 +230,7 @@ class _MusicPlayerState extends State<Activity1> {
       backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(CupertinoIcons.clear_thick, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ), 
         title: Column(
@@ -218,104 +256,140 @@ class _MusicPlayerState extends State<Activity1> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              getImage(),
-              SizedBox(height: 20),
-              getDetails(),
-
-              SizedBox(height: 10),
-              Column(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            width: 550,
+            height: double.infinity,
+            color: const Color.fromARGB(255, 0, 0, 0),
+            child: Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 50),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
-                        SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            activeTrackColor: const Color.fromARGB(255, 255, 255, 255),        // Color of the track left of thumb
-                            inactiveTrackColor: const Color.fromARGB(255, 86, 86, 86),     // Color of the track right of thumb
-                            thumbColor: const Color.fromARGB(255, 255, 255, 255),              // Color of the draggable thumb
-                            overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(32), // Color when thumb is pressed
-                            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
-                            overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
-                          ),
-                          child: Slider(
-                            min: 0,
-                            max: _duration.inSeconds.toDouble(),
-                            value: _position.inSeconds.toDouble().clamp(0, _duration.inSeconds.toDouble()),
-                            onChanged: (value) async {
-                              final position = Duration(seconds: value.toInt());
-                              await _audioPlayer.seek(position);
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(formatTime(_position), style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300)),
-                              Text(formatTime(_duration), style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300)),
-                            ],
-                        ),
+                        getImage(),
+                        SizedBox(height: 20),
+                        getDetails(),
                       ],
                     ),
                   ),
-                ],
-              ),
 
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: Icon(CupertinoIcons.list_bullet),
-                    iconSize: 30,
-                    color: Colors.white,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SongListPage(
-                            songs: songs,
-                            onSongSelected: _playSong,
-                          ),
+                  SizedBox(height: 10),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsGeometry.symmetric(horizontal: 0),
+                        child: Column(
+                          children: [
+                            SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                activeTrackColor: const Color.fromARGB(255, 255, 255, 255),           // Color of the track left of thumb
+                                inactiveTrackColor: const Color.fromARGB(255, 86, 86, 86),            // Color of the track right of thumb
+                                thumbColor: const Color.fromARGB(255, 255, 255, 255),                 // Color of the draggable thumb
+                                overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(32), // Color when thumb is pressed
+                                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
+                                overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
+                              ),
+                              child: Slider(
+                                min: 0,
+                                max: _duration.inSeconds.toDouble(),
+                                value: _position.inSeconds.toDouble().clamp(0, _duration.inSeconds.toDouble()),
+                                onChanged: (value) async {
+                                  final position = Duration(seconds: value.toInt());
+                                  await _audioPlayer.seek(position);
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10), 
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    formatTime(_position),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                  Text(
+                                    formatTime(_duration),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(CupertinoIcons.backward_fill),
-                    iconSize: 40,
-                    onPressed: _prevSong,
-                    color: Colors.white,
-                  ),
-                  IconButton(
-                    icon: Icon(_isPlaying ? CupertinoIcons.pause_solid : CupertinoIcons.play_arrow_solid),
-                    iconSize: 50,
-                    onPressed: _togglePlayPause,
-                    color: Colors.white,
-                  ),
-                  IconButton(
-                    icon: Icon(CupertinoIcons.forward_fill),
-                    iconSize: 40,
-                    onPressed: _nextSong,
-                    color: Colors.white,
-                  ),
-                  IconButton(
-                    icon: Icon(CupertinoIcons.shuffle),
-                    iconSize: 30,
-                    onPressed: _shuffleSong,
-                    color: Colors.white,
+
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(CupertinoIcons.list_bullet),
+                        iconSize: 30,
+                        color: Colors.white,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SongListPage(
+                                songs: songs,
+                                onSongSelected: _playSong,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(CupertinoIcons.backward_fill),
+                        iconSize: 40,
+                        onPressed: _prevSong,
+                        color: Colors.white,
+                      ),
+                      IconButton(
+                        icon: Icon(_isPlaying ? CupertinoIcons.pause_solid : CupertinoIcons.play_arrow_solid),
+                        iconSize: 50,
+                        onPressed: _togglePlayPause,
+                        color: Colors.white,
+                      ),
+                      IconButton(
+                        icon: Icon(CupertinoIcons.forward_fill),
+                        iconSize: 40,
+                        onPressed: _nextSong,
+                        color: Colors.white,
+                      ),
+                      IconButton(
+                        icon: Icon(CupertinoIcons.shuffle),
+                        iconSize: 30,
+                        onPressed: _shuffleSong,
+                        color: Colors.white,
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
+          
         ),
+
+
+
       ),
     );
   }
