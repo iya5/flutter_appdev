@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appdev/pages/activity1.dart';
+import 'package:flutter_appdev/pages/f_activity1/activity1.dart';
 import 'package:flutter_appdev/pages/activity2.dart';
 import 'package:flutter_appdev/pages/activity3.dart';
 import 'package:flutter_appdev/pages/activity4.dart';
@@ -19,10 +19,10 @@ class Homepage extends StatelessWidget {
       ****AppBar***
       *************/
       home: Scaffold(
-        backgroundColor: const Color.fromARGB(255,17,191,255),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: const Color.fromARGB(255,17,191,255),
+          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
           toolbarHeight: 190,
           toolbarOpacity: 0.5,
           title: Column(
@@ -64,7 +64,7 @@ class Homepage extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
-                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ],
@@ -78,7 +78,7 @@ class Homepage extends StatelessWidget {
       *************/
         body: Container(
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: Color.fromARGB(255, 0, 0, 0),
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(
                 25,
@@ -93,14 +93,14 @@ class Homepage extends StatelessWidget {
             child: GridView.extent(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               maxCrossAxisExtent: 500,
-              childAspectRatio: 1.5,
+              childAspectRatio: 2.0,
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
               children: [
                 ActivityCard(
                   "Music Player",
                   "activity 1",
-                  Colors.red,
+                  Color(0xFFD60017),
                   "assets/images/revefinale.jpg",
                   () => Activity1(),
                 ),
