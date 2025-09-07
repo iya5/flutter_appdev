@@ -23,7 +23,7 @@ class Homepage extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          toolbarHeight: 190,
+          toolbarHeight: 200,
           toolbarOpacity: 0.5,
           title: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -58,7 +58,7 @@ class Homepage extends StatelessWidget {
                       'App Development',
                       style: TextStyle(color: Colors.white, fontSize: 28),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 15),
                     Text(
                       'C - CS302',
                       style: TextStyle(
@@ -90,20 +90,7 @@ class Homepage extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Text(
-                'App Development',
-                style: TextStyle(color: Colors.white, fontSize: 28),
-              ),
-              SizedBox(height: 4),
-              Text(
-                'C - CS302',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              Container(
+              Expanded( 
                 child: GridView.extent(
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                   maxCrossAxisExtent: 500,
@@ -123,27 +110,29 @@ class Homepage extends StatelessWidget {
                       "wow",
                       Colors.purple,
                       "assets/images/bee.jpg",
-                      () => Activity2()
+                      () => Activity2(),
                     ),
                     ActivityCard(
                       "Activity 3",
                       "hallaw",
                       Colors.orange,
                       "assets/images/bee.jpg",
-                      () => Activity3()
+                      () => Activity3(),
                     ),
                     ActivityCard(
-                      "Activity 4", 
+                      "Activity 4",
                       "shimi shimi",
                       Colors.green,
                       "assets/images/bee.jpg",
-                      () => Activity4()
-                    ), 
+                      () => Activity4(),
+                    ),
                   ],
-                ), 
+                ),
               ),
+
             ],
           ),
+
 
         ),
       ),

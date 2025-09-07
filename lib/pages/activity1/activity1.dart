@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audiotags/audiotags.dart';
@@ -19,7 +20,6 @@ class SongMetadata {
   String? trackArtist;
   String? album;
   //int? year;
-  //int? duration = tag?.duration;
   Picture? picture;
 
   SongMetadata(
@@ -34,13 +34,15 @@ class _MusicPlayerState extends State<Activity1> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   SongMetadata songMetadata = SongMetadata(null, null, null, null);
   int _currentIndex = 0;
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
+
   bool _isPlaying = false;
   
   String? currentTitle;
   String? currentTrackArtist;
   String? currentAlbum;
   int? currentYear;
-  //int? duration = tag?.duration;
   Picture? picture;
 
   List<String> songs = [
@@ -69,7 +71,24 @@ class _MusicPlayerState extends State<Activity1> {
     _audioPlayer.onPlayerComplete.listen((event) {
       _nextSong();
     });
+
+    // Listen to audio duration
+    _audioPlayer.onDurationChanged.listen((d) {
+      setState(() {
+        _duration = d;
+      });
+    });
+
+    // Listen to audio position
+    _audioPlayer.onPositionChanged.listen((p) {
+      setState(() {
+        _position = p;
+      });
+    });
+
   }
+
+  
 
   Future<void> _preload() async {
     await _getMetadata(_currentIndex);
@@ -159,9 +178,9 @@ class _MusicPlayerState extends State<Activity1> {
 
     return Column (
       children: [
-        Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700), textAlign: TextAlign.center),
-        Text(artist, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400), textAlign: TextAlign.center),
-        Text(album, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300), textAlign: TextAlign.center),
+        Text(title, style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
+        Text(artist, style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.center),
+        Text(album, style: TextStyle(color: Colors.white54, fontSize: 12, fontWeight: FontWeight.w200), textAlign: TextAlign.center),
       ],
     );
   }
@@ -170,43 +189,92 @@ class _MusicPlayerState extends State<Activity1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ), 
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Music Player', style: TextStyle(color: Colors.white)),
             Text(
               'Activity 1',
-              style: TextStyle(color: Colors.white, fontSize: 14.0, fontStyle: FontStyle.italic),
+              style: TextStyle(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w400),
             ),
           ],
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         toolbarHeight: 80,
         toolbarOpacity: 0.5,
       ),
+
+
+
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color.fromARGB(255, 0, 0, 0),
           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               getImage(),
               SizedBox(height: 20),
               getDetails(),
 
-              SizedBox(height: 40),
+              SizedBox(height: 10),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsetsGeometry.symmetric(horizontal: 50),
+                    child: Column(
+                      children: [
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: const Color.fromARGB(255, 255, 255, 255),        // Color of the track left of thumb
+                            inactiveTrackColor: const Color.fromARGB(255, 86, 86, 86),     // Color of the track right of thumb
+                            thumbColor: const Color.fromARGB(255, 255, 255, 255),              // Color of the draggable thumb
+                            overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(32), // Color when thumb is pressed
+                            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
+                            overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
+                          ),
+                          child: Slider(
+                            min: 0,
+                            max: _duration.inSeconds.toDouble(),
+                            value: _position.inSeconds.toDouble().clamp(0, _duration.inSeconds.toDouble()),
+                            onChanged: (value) async {
+                              final position = Duration(seconds: value.toInt());
+                              await _audioPlayer.seek(position);
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(formatTime(_position), style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300)),
+                              Text(formatTime(_duration), style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300)),
+                            ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.library_music),
+                    icon: Icon(CupertinoIcons.list_bullet),
                     iconSize: 30,
-                    color: Colors.red,
+                    color: Colors.white,
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -220,28 +288,28 @@ class _MusicPlayerState extends State<Activity1> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.skip_previous),
+                    icon: Icon(CupertinoIcons.backward_fill),
                     iconSize: 40,
                     onPressed: _prevSong,
-                    color: Colors.red,
+                    color: Colors.white,
                   ),
                   IconButton(
-                    icon: Icon(_isPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled),
+                    icon: Icon(_isPlaying ? CupertinoIcons.pause_solid : CupertinoIcons.play_arrow_solid),
                     iconSize: 50,
                     onPressed: _togglePlayPause,
-                    color: Colors.red,
+                    color: Colors.white,
                   ),
                   IconButton(
-                    icon: Icon(Icons.skip_next),
+                    icon: Icon(CupertinoIcons.forward_fill),
                     iconSize: 40,
                     onPressed: _nextSong,
-                    color: Colors.red,
+                    color: Colors.white,
                   ),
                   IconButton(
-                    icon: Icon(Icons.shuffle),
+                    icon: Icon(CupertinoIcons.shuffle),
                     iconSize: 30,
                     onPressed: _shuffleSong,
-                    color: Colors.red,
+                    color: Colors.white,
                   ),
                 ],
               ),
@@ -250,5 +318,11 @@ class _MusicPlayerState extends State<Activity1> {
         ),
       ),
     );
+  }
+   String formatTime(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$minutes:$seconds';
   }
 }
