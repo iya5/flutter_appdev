@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+/* I separated this class so atleast activity 1 looks cleaner */
 class SongListPage extends StatelessWidget {
   final List<String> songs;
   final Function(int) onSongSelected;

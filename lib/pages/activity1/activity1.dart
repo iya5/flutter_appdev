@@ -15,6 +15,7 @@ class Activity1 extends StatefulWidget {
   _MusicPlayerState createState() => _MusicPlayerState();
 }
 
+/* Im getting the music file metadata using audio tags: link in readme */
 class SongMetadata {
   String? title;
   String? trackArtist;
@@ -34,7 +35,7 @@ class _MusicPlayerState extends State<Activity1> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   SongMetadata songMetadata = SongMetadata(null, null, null, null);
   int _currentIndex = 0;
-  Duration _duration = Duration.zero;
+  Duration _duration = Duration.zero; 
   Duration _position = Duration.zero;
 
   bool _isPlaying = false;
@@ -62,7 +63,8 @@ class _MusicPlayerState extends State<Activity1> {
   ];
 
   @override // docs: https://api.flutter.dev/flutter/widgets/State/initState.html
-  void initState() { // used this to play the song immediately after clicking activity
+  /* This is just to play the song immediately after clicking activity */
+  void initState() { 
     super.initState();
     _currentIndex = 0;
 
@@ -72,14 +74,13 @@ class _MusicPlayerState extends State<Activity1> {
       _nextSong();
     });
 
-    // Listen to audio duration
+    /* Listen to audio duration and position for the slider: audiotags */
     _audioPlayer.onDurationChanged.listen((d) {
       setState(() {
         _duration = d;
       });
     });
 
-    // Listen to audio position
     _audioPlayer.onPositionChanged.listen((p) {
       setState(() {
         _position = p;
@@ -89,7 +90,7 @@ class _MusicPlayerState extends State<Activity1> {
   }
 
   
-
+  /* used this for preloading metadata */
   Future<void> _preload() async {
     await _getMetadata(_currentIndex);
 
@@ -98,7 +99,8 @@ class _MusicPlayerState extends State<Activity1> {
     );
   }
 
-  Future<void> _getMetadata(int index) async { // used this for showing metadata
+  /* used this for showing metadata */
+  Future<void> _getMetadata(int index) async { 
     Tag? tag = await AudioTags.read(songs[index]);
 
     setState(() {
@@ -106,7 +108,6 @@ class _MusicPlayerState extends State<Activity1> {
       songMetadata.trackArtist = tag?.trackArtist;
       songMetadata.album = tag?.album;
       //songMetadata.year = tag?.year;
-      //int? duration = tag?.duration;
       List<Picture>? pictures = tag?.pictures;
       songMetadata.picture = pictures?[0];
     });
@@ -114,7 +115,7 @@ class _MusicPlayerState extends State<Activity1> {
   
 
   Future<void> _playSong(int index) async {
-    // await is necessary to get metadata before rebuilding ui and playing song
+    /* await is necessary to get metadata before rebuilding ui and playing song */
     await _getMetadata(index); 
     await _audioPlayer.stop();
     await _audioPlayer.play(AssetSource(songs[index].replaceFirst("assets/", "")));
@@ -171,9 +172,7 @@ class _MusicPlayerState extends State<Activity1> {
   Widget getDetails() {
 
     String title = (songMetadata.title == null) ? "Unknown Title" : songMetadata.title!;
-
     String artist = (songMetadata.trackArtist == null) ? "Unknown Artist" : songMetadata.trackArtist!;
-
     String album = (songMetadata.album == null) ? "Unknown Album" : songMetadata.album!;
 
     return Column(
@@ -287,10 +286,10 @@ class _MusicPlayerState extends State<Activity1> {
                           children: [
                             SliderTheme(
                               data: SliderTheme.of(context).copyWith(
-                                activeTrackColor: const Color.fromARGB(255, 255, 255, 255),           // Color of the track left of thumb
-                                inactiveTrackColor: const Color.fromARGB(255, 86, 86, 86),            // Color of the track right of thumb
-                                thumbColor: const Color.fromARGB(255, 255, 255, 255),                 // Color of the draggable thumb
-                                overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(32), // Color when thumb is pressed
+                                activeTrackColor: const Color.fromARGB(255, 255, 255, 255),           
+                                inactiveTrackColor: const Color.fromARGB(255, 86, 86, 86),          
+                                thumbColor: const Color.fromARGB(255, 255, 255, 255),                
+                                overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(32),
                                 thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
                                 overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
                               ),
