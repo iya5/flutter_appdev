@@ -71,8 +71,8 @@ class _MusicPlayerState extends State<Activity1> {
   Picture? picture;
 
   final List<String> _songPaths = [
-    "assets/music/AVOCADO (feat. Gliiico).mp3",
     "assets/music/1 TO 10.mp3",
+    "assets/music/AVOCADO (feat. Gliiico).mp3",
     "assets/music/Alcohol-Free.mp3",
     "assets/music/Celebrate.mp3",
     "assets/music/Feel My Rhythm.mp3",
@@ -281,9 +281,12 @@ class _MusicPlayerState extends State<Activity1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(255, 0, 170, 255),
       appBar: AppBar(
-        
+        leading: IconButton(
+          icon: Icon(CupertinoIcons.clear_thick, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ), 
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -294,7 +297,7 @@ class _MusicPlayerState extends State<Activity1> {
             ),
           ],
         ),
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: const Color.fromARGB(255, 59, 108, 14),
         toolbarHeight: 80,
         toolbarOpacity: 0.5,
       ),
@@ -302,30 +305,40 @@ class _MusicPlayerState extends State<Activity1> {
       // ---------- Body ----------
       body: Container(
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 0, 0, 0),
+          color: const Color.fromARGB(255, 255, 251, 0),
           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: Center(
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
             width: 550,
             height: double.infinity,
-            color: const Color.fromARGB(255, 0, 0, 0),
+            color: const Color.fromARGB(255, 255, 145, 0),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // ---------- Image & Details ----------
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    padding: EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        getImage(),
-                        SizedBox(height: 20),
-                        getDetails(),
+                        // ---------- Image & Details ----------
+                        Container(
+                          color: const Color.fromARGB(255, 255, 0, 0),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            children: [
+                              getImage(),
+                              SizedBox(height: 20),
+                              getDetails(),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
+
                   ),
 
                   SizedBox(height: 10),
@@ -341,7 +354,7 @@ class _MusicPlayerState extends State<Activity1> {
                             SliderTheme(
                               data: SliderTheme.of(context).copyWith(
                                 activeTrackColor: const Color.fromARGB(255, 255, 255, 255),           
-                                inactiveTrackColor: const Color.fromARGB(255, 86, 86, 86),          
+                                inactiveTrackColor: const Color.fromARGB(198, 88, 88, 88),          
                                 thumbColor: const Color.fromARGB(255, 255, 255, 255),                
                                 overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(32),
                                 thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
@@ -366,7 +379,7 @@ class _MusicPlayerState extends State<Activity1> {
                                   Text(
                                     formatTime(_position),
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: const Color.fromARGB(197, 145, 145, 145),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w300,
                                     ),
@@ -374,7 +387,7 @@ class _MusicPlayerState extends State<Activity1> {
                                   Text(
                                     formatTime(_duration),
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: const Color.fromARGB(197, 145, 145, 145),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w300,
                                     ),
@@ -396,8 +409,8 @@ class _MusicPlayerState extends State<Activity1> {
                     children: [
                       IconButton(
                         icon: Icon(CupertinoIcons.list_bullet),
-                        iconSize: 30,
-                        color: Colors.white,
+                        iconSize: 20,
+                        color: const Color.fromARGB(197, 145, 145, 145),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -410,29 +423,33 @@ class _MusicPlayerState extends State<Activity1> {
                           );
                         },
                       ),
+                      SizedBox(width: 20),
                       IconButton(
                         icon: Icon(CupertinoIcons.backward_fill),
-                        iconSize: 40,
+                        iconSize: 30,
                         onPressed: _prevSong,
                         color: Colors.white,
                       ),
+                      SizedBox(width: 20),
                       IconButton(
                         icon: Icon(_isPlaying ? CupertinoIcons.pause_solid : CupertinoIcons.play_arrow_solid),
-                        iconSize: 50,
+                        iconSize: 45,
                         onPressed: _togglePlayPause,
                         color: Colors.white,
                       ),
+                      SizedBox(width: 20),
                       IconButton(
                         icon: Icon(CupertinoIcons.forward_fill),
-                        iconSize: 40,
+                        iconSize: 30,
                         onPressed: _nextSong,
                         color: Colors.white,
                       ),
+                      SizedBox(width: 20),
                       IconButton(
                         icon: Icon(CupertinoIcons.shuffle),
-                        iconSize: 30,
+                        iconSize: 20,
                         onPressed: _shuffleSong,
-                        color: Colors.white,
+                        color: const Color.fromARGB(197, 145, 145, 145),
                       ),
                     ],
                   ),
