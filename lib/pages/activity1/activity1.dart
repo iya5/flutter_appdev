@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audiotags/audiotags.dart';
 import 'dart:math';
+import 'song_model.dart';
+import 'song_list_widget.dart';
 
 // ======================= WIDGET =======================
 class Activity1 extends StatefulWidget {
@@ -11,30 +13,6 @@ class Activity1 extends StatefulWidget {
 
   @override
   _MusicPlayerState createState() => _MusicPlayerState();
-}
-
-// ======================= DATA STRUCTURES =======================
-class Song {
-  SongMetadata metadata;
-  String path;
-
-  Song(this.metadata, this.path);
-}
-
-class SongMetadata {
-  String? title;
-  String? trackArtist;
-  String? album;
-  int? year;
-  Picture? picture;
-
-  SongMetadata(
-    this.title,
-    this.trackArtist,
-    this.album,
-    this.year,
-    this.picture,
-  );
 }
 
 // ======================= STATE CLASS =======================
@@ -363,23 +341,17 @@ class _MusicPlayerState extends State<Activity1> {
 
                       const SizedBox(height: 1),
 
-                      // ---------- White Box: Song List ----------
+                      // ---------- Song List ----------
                       if (_showSongList)
                         Container(
-                          height: 477, // adjust as needed
+                          height: 477,
                           color: Colors.white,
-                          child: ListView.builder(
-                            itemCount: songs.length,
-                            itemBuilder: (context, index) {
-                              String songName = songs[index].metadata.title ??
-                                  songs[index].path.split("/").last.replaceAll(".mp3", "");
-                              return ListTile(
-                                title: Text(songName),
-                                onTap: () => _playSong(index),
-                              );
-                            },
+                          child: SongListWidget(
+                            songs: songs,
+                            onSongTap: _playSong,
                           ),
                         ),
+
                     ],
                   ),
                 ),
