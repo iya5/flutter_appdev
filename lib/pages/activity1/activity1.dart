@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audiotags/audiotags.dart';
 import 'dart:math';
-//import 'dart:typed_data';
-import 'songListPage.dart';
 
 // ======================= WIDGET =======================
 class Activity1 extends StatefulWidget {
@@ -16,19 +14,13 @@ class Activity1 extends StatefulWidget {
 }
 
 // ======================= DATA STRUCTURES =======================
-/* Im getting the music file metadata using audio tags: links will be in readme*/
 class Song {
   SongMetadata metadata;
   String path;
 
-  Song(
-    this.metadata,
-    this.path,
-  );
+  Song(this.metadata, this.path);
 }
 
-// struct for the meta data and then wrap the data of the song player
-// https://medium.com/@suatozkaya/dart-constructors-101-69c5b9db5230
 class SongMetadata {
   String? title;
   String? trackArtist;
@@ -36,8 +28,6 @@ class SongMetadata {
   int? year;
   Picture? picture;
 
-  // https://dart.dev/language/constructors#generative-constructors
-  // creating a constructor for the "struct"
   SongMetadata(
     this.title,
     this.trackArtist,
@@ -54,18 +44,16 @@ class _MusicPlayerState extends State<Activity1> {
   late List<Song> songs;
 
   int _currentIndex = 0;
-  Duration _duration = Duration.zero; 
+  Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
 
   bool _isPlaying = false;
   bool _showSongList = false;
 
-
-  // docs: https://api.flutter.dev/flutter/dart-async/StreamSubscription-class.html
   late StreamSubscription<Duration> _durationListener;
   late StreamSubscription<Duration> _positionListener;
   late StreamSubscription<void> _completionListener;
-  
+
   String? currentTitle;
   String? currentTrackArtist;
   String? currentAlbum;
@@ -90,13 +78,13 @@ class _MusicPlayerState extends State<Activity1> {
   ];
 
   // ======================= INIT & DISPOSE =======================
-  @override 
-  void initState() { 
+  @override
+  void initState() {
     super.initState();
     _currentIndex = 0;
     songs = [];
 
-    _initPlayer();  
+    _initPlayer();
 
     _completionListener = _audioPlayer.onPlayerComplete.listen((event) {
       if (mounted) _nextSong();
@@ -121,7 +109,6 @@ class _MusicPlayerState extends State<Activity1> {
 
   @override
   void dispose() {
-    // Cancel listeners before disposing so it wont crash my app T_T
     _durationListener.cancel();
     _positionListener.cancel();
     _completionListener.cancel();
@@ -204,19 +191,19 @@ class _MusicPlayerState extends State<Activity1> {
   // ======================= UI HELPERS =======================
   Widget getImage() {
     if (songs.isEmpty) {
-      return Icon(Icons.music_note, size: 100,);
+      return const Icon(Icons.music_note, size: 100);
     }
 
-    SongMetadata metadata = songs[_currentIndex].metadata; 
+    SongMetadata metadata = songs[_currentIndex].metadata;
     if (metadata.picture == null) {
-      return Icon(Icons.music_note, size: 100,);
+      return const Icon(Icons.music_note, size: 100);
     }
 
     return Image.memory(
       metadata.picture!.bytes,
       width: 500,
       height: 500,
-      fit: BoxFit.cover
+      fit: BoxFit.cover,
     );
   }
 
@@ -224,40 +211,46 @@ class _MusicPlayerState extends State<Activity1> {
     if (songs.isEmpty) {
       return const Text(
         "Loading...",
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white,),
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
       );
     }
 
-    SongMetadata metadata = songs[_currentIndex].metadata; 
-    String title =  (metadata.title == null) ? "Unknown" : metadata.title!;
-    String artist = (metadata.trackArtist == null) ? "Unknown" : metadata.trackArtist!;
-    String album = (metadata.album == null) ? "Unknown" : metadata.album!;
-    
+    SongMetadata metadata = songs[_currentIndex].metadata;
+    String title = (metadata.title == null) ? "Unknown" : metadata.title!;
+    String artist =
+        (metadata.trackArtist == null) ? "Unknown" : metadata.trackArtist!;
+    String album =
+        (metadata.album == null) ? "Unknown" : metadata.album!;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 22,
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 4), 
+        const SizedBox(height: 4),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               artist,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 15,
                 fontWeight: FontWeight.w300,
               ),
             ),
-            Text(
+            const Text(
               " - ",
               style: TextStyle(
                 color: Colors.white54,
@@ -267,7 +260,7 @@ class _MusicPlayerState extends State<Activity1> {
             ),
             Text(
               album,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white54,
                 fontSize: 14,
                 fontWeight: FontWeight.w200,
@@ -286,16 +279,20 @@ class _MusicPlayerState extends State<Activity1> {
       backgroundColor: const Color.fromARGB(255, 0, 170, 255),
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(CupertinoIcons.clear_thick, color: Colors.white),
+          icon: const Icon(CupertinoIcons.clear_thick, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
-        ), 
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             Text('Music Player', style: TextStyle(color: Colors.white)),
             Text(
               'Activity 1',
-              style: TextStyle(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w400),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ],
         ),
@@ -306,191 +303,194 @@ class _MusicPlayerState extends State<Activity1> {
 
       // ---------- Body ----------
       body: Container(
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 255, 251, 0),
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 255, 251, 0),
           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: Center(
           child: Container(
-            // have list and ui
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
             width: 550,
             height: double.infinity,
             color: const Color.fromARGB(255, 255, 145, 0),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    // list have img&details
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                    padding: EdgeInsets.all(0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          // img & details
-                          color: const Color.fromARGB(255, 255, 0, 0),
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                          child: _showSongList
-                              ? Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 100,
-                                      width: 100,
-                                      child: getImage(),
-                                    ),
-                                    SizedBox(width: 20),
-                                    Expanded(child: getDetails()),
-                                  ],
-                                )
-                              : Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 500,
-                                      child: getImage(),
-                                    ),
-                                    SizedBox(height: 20),
-                                    getDetails(),
-                                  ],
-                                ),
-                        ),
-
-                        if (_showSongList)
-                          Container(
-                            // list
-                            height: 476, 
-                            color: Colors.white,
-                            child: ListView.builder(
-                              itemCount: songs.length,
-                              itemBuilder: (context, index) {
-                                String songName = songs[index].metadata.title ??
-                                    songs[index].path.split("/").last.replaceAll(".mp3", "");
-                                return ListTile(
-                                  title: Text(songName),
-                                  onTap: () => _playSong(index),
-                                );
-                              },
-                            ),
-                        ),
-
-                      ],
-                    ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // ---------- Inner Card Container ----------
+                Container(
+                  width: 500,        
+                  height: 600, 
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 13, 0, 255), 
                   ),
-
-
-                  SizedBox(height: 10),
-
-                  // ---------- Slider ----------
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: EdgeInsetsGeometry.symmetric(horizontal: 0),
-                        child: Column(
-                          children: [
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                activeTrackColor: const Color.fromARGB(255, 255, 255, 255),           
-                                inactiveTrackColor: const Color.fromARGB(198, 88, 88, 88),          
-                                thumbColor: const Color.fromARGB(255, 255, 255, 255),                
-                                overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(32),
-                                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
-                                overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
-                              ),
-                              child: Slider(
-                                min: 0,
-                                max: _duration.inSeconds.toDouble(),
-                                value: _position.inSeconds.toDouble().clamp(0, _duration.inSeconds.toDouble()),
-                                onChanged: (value) async {
-                                  final position = Duration(seconds: value.toInt());
-                                  await _audioPlayer.seek(position);
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10), 
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // ---------- Image & Details ----------
+                      Container(
+                        color: Colors.red,
+                        padding: const EdgeInsets.all(10),
+                        child: _showSongList
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    formatTime(_position),
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(197, 145, 145, 145),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w300,
-                                    ),
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                    height: 100,
+                                    width: 100,
+                                    child: getImage(),
                                   ),
-                                  Text(
-                                    formatTime(_duration),
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(197, 145, 145, 145),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w300,
-                                    ),
+                                  const SizedBox(width: 10),
+                                  Expanded(child: getDetails()),
+                                ],
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                    height: 500,
+                                    width: 500,
+                                    child: getImage(),
                                   ),
+                                  const SizedBox(height: 20),
+                                  getDetails(),
                                 ],
                               ),
-                            )
-                          ],
-                        ),
                       ),
+
+                      const SizedBox(height: 1),
+
+                      // ---------- White Box: Song List ----------
+                      if (_showSongList)
+                        Container(
+                          height: 477, // adjust as needed
+                          color: Colors.white,
+                          child: ListView.builder(
+                            itemCount: songs.length,
+                            itemBuilder: (context, index) {
+                              String songName = songs[index].metadata.title ??
+                                  songs[index].path.split("/").last.replaceAll(".mp3", "");
+                              return ListTile(
+                                title: Text(songName),
+                                onTap: () => _playSong(index),
+                              );
+                            },
+                          ),
+                        ),
                     ],
                   ),
+                ),
 
-                  SizedBox(height: 20),
+                const SizedBox(height: 10),
 
-                  // ---------- Controls ----------
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(CupertinoIcons.list_bullet),
-                        iconSize: 20,
-                        color: const Color.fromARGB(197, 145, 145, 145),
-                        onPressed: () {
-                          setState(() {
-                            _showSongList = !_showSongList;
-                          });
+                // ---------- Slider ----------
+                Column(
+                  children: [
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: const Color.fromARGB(255, 255, 255, 255),
+                        inactiveTrackColor:
+                            const Color.fromARGB(198, 88, 88, 88),
+                        thumbColor: const Color.fromARGB(255, 255, 255, 255),
+                        overlayColor: const Color.fromARGB(255, 255, 255, 255)
+                            .withAlpha(32),
+                        thumbShape:
+                            const RoundSliderThumbShape(enabledThumbRadius: 0),
+                        overlayShape:
+                            const RoundSliderOverlayShape(overlayRadius: 10),
+                      ),
+                      child: Slider(
+                        min: 0,
+                        max: _duration.inSeconds.toDouble(),
+                        value: _position.inSeconds
+                            .toDouble()
+                            .clamp(0, _duration.inSeconds.toDouble()),
+                        onChanged: (value) async {
+                          final position = Duration(seconds: value.toInt());
+                          await _audioPlayer.seek(position);
                         },
                       ),
+                    ),
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            formatTime(_position),
+                            style: const TextStyle(
+                              color: Color.fromARGB(197, 145, 145, 145),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          Text(
+                            formatTime(_duration),
+                            style: const TextStyle(
+                              color: Color.fromARGB(197, 145, 145, 145),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
 
-                      SizedBox(width: 20),
-                      IconButton(
-                        icon: Icon(CupertinoIcons.backward_fill),
-                        iconSize: 30,
-                        onPressed: _prevSong,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 20),
-                      IconButton(
-                        icon: Icon(_isPlaying ? CupertinoIcons.pause_solid : CupertinoIcons.play_arrow_solid),
-                        iconSize: 45,
-                        onPressed: _togglePlayPause,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 20),
-                      IconButton(
-                        icon: Icon(CupertinoIcons.forward_fill),
-                        iconSize: 30,
-                        onPressed: _nextSong,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 20),
-                      IconButton(
-                        icon: Icon(CupertinoIcons.shuffle),
-                        iconSize: 20,
-                        onPressed: _shuffleSong,
-                        color: const Color.fromARGB(197, 145, 145, 145),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                const SizedBox(height: 20),
+
+                // ---------- Controls ----------
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(CupertinoIcons.list_bullet),
+                      iconSize: 20,
+                      color: const Color.fromARGB(197, 145, 145, 145),
+                      onPressed: () {
+                        setState(() {
+                          _showSongList = !_showSongList;
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 20),
+                    IconButton(
+                      icon: const Icon(CupertinoIcons.backward_fill),
+                      iconSize: 30,
+                      onPressed: _prevSong,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 20),
+                    IconButton(
+                      icon: Icon(_isPlaying
+                          ? CupertinoIcons.pause_solid
+                          : CupertinoIcons.play_arrow_solid),
+                      iconSize: 45,
+                      onPressed: _togglePlayPause,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 20),
+                    IconButton(
+                      icon: const Icon(CupertinoIcons.forward_fill),
+                      iconSize: 30,
+                      onPressed: _nextSong,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 20),
+                    IconButton(
+                      icon: const Icon(CupertinoIcons.shuffle),
+                      iconSize: 20,
+                      onPressed: _shuffleSong,
+                      color: const Color.fromARGB(197, 145, 145, 145),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
