@@ -309,12 +309,12 @@ class _MusicPlayerState extends State<Activity1> {
         ),
         child: Center(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
             width: 550,
             height: double.infinity,
             color: const Color.fromARGB(255, 255, 145, 0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // ---------- Inner Card Container ----------
                 Container(
@@ -384,7 +384,7 @@ class _MusicPlayerState extends State<Activity1> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 // ---------- Slider ----------
                 Column(
