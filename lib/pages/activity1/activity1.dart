@@ -15,25 +15,42 @@ class Activity1 extends StatefulWidget {
   _MusicPlayerState createState() => _MusicPlayerState();
 }
 
-/* Im getting the music file metadata using audio tags: link in readme */
+class Song {
+  SongMetadata metadata;
+  String path;
+
+  Song(
+    this.metadata,
+    this.path,
+  );
+}
+
+// struct for the meta data
+// wrap the data of the song player
+// https://medium.com/@suatozkaya/dart-constructors-101-69c5b9db5230
 class SongMetadata {
   String? title;
   String? trackArtist;
   String? album;
-  //int? year;
+  int? year;
   Picture? picture;
 
+  // https://dart.dev/language/constructors#generative-constructors
+  // creating a constructor for the "struct"
   SongMetadata(
     this.title,
     this.trackArtist,
     this.album,
-    this.picture
+    this.year,
+    this.picture,
   );
 }
 
+
 class _MusicPlayerState extends State<Activity1> {
   final AudioPlayer _audioPlayer = AudioPlayer();
-  SongMetadata songMetadata = SongMetadata(null, null, null, null);
+  late List<Song> songs;
+
   int _currentIndex = 0;
   Duration _duration = Duration.zero; 
   Duration _position = Duration.zero;
@@ -46,7 +63,7 @@ class _MusicPlayerState extends State<Activity1> {
   int? currentYear;
   Picture? picture;
 
-  List<String> songs = [
+  final List<String> _songPaths = [
     "assets/music/1 TO 10.mp3",
     "assets/music/Alcohol-Free.mp3",
     "assets/music/Celebrate.mp3",
@@ -67,8 +84,9 @@ class _MusicPlayerState extends State<Activity1> {
   void initState() { 
     super.initState();
     _currentIndex = 0;
+    songs = [];
 
-    _preload();
+    _initPlayer();  
 
     _audioPlayer.onPlayerComplete.listen((event) {
       _nextSong();
@@ -89,36 +107,46 @@ class _MusicPlayerState extends State<Activity1> {
 
   }
 
-  
-  /* used this for preloading metadata */
-  Future<void> _preload() async {
-    await _getMetadata(_currentIndex);
+  Future<void> _initPlayer() async {
+    await _getSongs(_songPaths);
 
-    await _audioPlayer.setSource(
-      AssetSource((songs[_currentIndex].replaceFirst("assets/", "")))
-    );
+    // preload the first song to avoid ui lagging behind
+    // grabbing the songs to audioplayer and audiotags
+    if (songs.isNotEmpty) {
+      await _audioPlayer.setSource(
+        AssetSource(songs[0].path),
+      );
+
+      setState(() {
+        _currentIndex = 0;
+      });
+    }
   }
 
-  /* used this for showing metadata */
-  Future<void> _getMetadata(int index) async { 
-    Tag? tag = await AudioTags.read(songs[index]);
+  Future<void> _getSongs(List<String> songPaths) async {
+    for (int i = 0; i < songPaths.length; i++) {
+      Tag? tag = await AudioTags.read(songPaths[i]);
+      SongMetadata metadata = SongMetadata(null, null, null, null, null);
 
-    setState(() {
-      songMetadata.title = tag?.title;
-      songMetadata.trackArtist = tag?.trackArtist;
-      songMetadata.album = tag?.album;
-      //songMetadata.year = tag?.year;
+      metadata.title = tag?.title;
+      metadata.trackArtist = tag?.trackArtist;
+      metadata.album = tag?.album;
+      metadata.year = tag?.year;
       List<Picture>? pictures = tag?.pictures;
-      songMetadata.picture = pictures?[0];
-    });
+      metadata.picture = pictures?[0];
+
+      Song song = Song(
+        metadata,
+        songPaths[i].replaceFirst("assets/", ""),
+      );
+      songs.add(song);
+    }
   }
   
 
   Future<void> _playSong(int index) async {
-    /* await is necessary to get metadata before rebuilding ui and playing song */
-    await _getMetadata(index); 
     await _audioPlayer.stop();
-    await _audioPlayer.play(AssetSource(songs[index].replaceFirst("assets/", "")));
+    await _audioPlayer.play(AssetSource(songs[index].path));
     setState(() {
       _currentIndex = index;
       _isPlaying = true;
@@ -157,12 +185,20 @@ class _MusicPlayerState extends State<Activity1> {
     super.dispose();
   }
 
+
   Widget getImage() {
-    if (songMetadata.picture == null) {
-      return Icon(Icons.music_note_sharp, size: 200, color: Colors.red);
+  if (songs.isEmpty) {
+     return Icon(Icons.music_note, size: 100,);
+  }
+
+  SongMetadata metadata = songs[_currentIndex].metadata; 
+
+    if (metadata.picture == null) {
+      return Icon(Icons.music_note, size: 100,);
     }
+
     return Image.memory(
-      songMetadata.picture!.bytes,
+      metadata.picture!.bytes,
       width: 500,
       height: 500,
       fit: BoxFit.cover
@@ -170,11 +206,19 @@ class _MusicPlayerState extends State<Activity1> {
   }
 
   Widget getDetails() {
+    if (songs.isEmpty) {
+    return const Text(
+      "Loading...",
+      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white,),
+    );
+  }
 
-    String title = (songMetadata.title == null) ? "Unknown Title" : songMetadata.title!;
-    String artist = (songMetadata.trackArtist == null) ? "Unknown Artist" : songMetadata.trackArtist!;
-    String album = (songMetadata.album == null) ? "Unknown Album" : songMetadata.album!;
-
+  SongMetadata metadata = songs[_currentIndex].metadata; 
+    // set defaults
+    String title =  (metadata.title == null) ? "Unknown" : metadata.title!;
+    String artist = (metadata.trackArtist == null) ? "Unknown" : metadata.trackArtist!;
+    String album = (metadata.album == null) ? "Unknown" : metadata.album!;
+    
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,7 +391,7 @@ class _MusicPlayerState extends State<Activity1> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => SongListPage(
-                                songs: songs,
+                                songs: _songPaths,
                                 onSongSelected: _playSong,
                               ),
                             ),
