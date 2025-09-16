@@ -37,13 +37,11 @@ class Homepage extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.menu, color: Colors.white),
                       onPressed: () {
-                        print("Drawer tapped");
                       },
                     ),
                     IconButton(
                       icon: const Icon(Icons.settings, color: Colors.white),
                       onPressed: () {
-                        print("Settings tapped");
                       },
                     ),
                   ],
@@ -73,6 +71,7 @@ class Homepage extends StatelessWidget {
             ],
           ),
         ),
+        
       /************
       *****BODY****
       *************/

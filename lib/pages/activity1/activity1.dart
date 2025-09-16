@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -6,8 +7,7 @@ import 'dart:math';
 //import 'dart:typed_data';
 import 'songListPage.dart';
 
-
-
+// ======================= WIDGET =======================
 class Activity1 extends StatefulWidget {
   const Activity1({super.key});
 
@@ -15,6 +15,8 @@ class Activity1 extends StatefulWidget {
   _MusicPlayerState createState() => _MusicPlayerState();
 }
 
+// ======================= DATA STRUCTURES =======================
+/* Im getting the music file metadata using audio tags: links will be in readme*/
 class Song {
   SongMetadata metadata;
   String path;
@@ -25,8 +27,7 @@ class Song {
   );
 }
 
-// struct for the meta data
-// wrap the data of the song player
+// struct for the meta data and then wrap the data of the song player
 // https://medium.com/@suatozkaya/dart-constructors-101-69c5b9db5230
 class SongMetadata {
   String? title;
@@ -46,8 +47,9 @@ class SongMetadata {
   );
 }
 
-
+// ======================= STATE CLASS =======================
 class _MusicPlayerState extends State<Activity1> {
+  // ---------- Variables ----------
   final AudioPlayer _audioPlayer = AudioPlayer();
   late List<Song> songs;
 
@@ -56,6 +58,11 @@ class _MusicPlayerState extends State<Activity1> {
   Duration _position = Duration.zero;
 
   bool _isPlaying = false;
+
+  // docs: https://api.flutter.dev/flutter/dart-async/StreamSubscription-class.html
+  late StreamSubscription<Duration> _durationListener;
+  late StreamSubscription<Duration> _positionListener;
+  late StreamSubscription<void> _completionListener;
   
   String? currentTitle;
   String? currentTrackArtist;
@@ -64,6 +71,7 @@ class _MusicPlayerState extends State<Activity1> {
   Picture? picture;
 
   final List<String> _songPaths = [
+    "assets/music/AVOCADO (feat. Gliiico).mp3",
     "assets/music/1 TO 10.mp3",
     "assets/music/Alcohol-Free.mp3",
     "assets/music/Celebrate.mp3",
@@ -79,8 +87,8 @@ class _MusicPlayerState extends State<Activity1> {
     "assets/music/SAY YOU LOVE ME.mp3",
   ];
 
-  @override // docs: https://api.flutter.dev/flutter/widgets/State/initState.html
-  /* This is just to play the song immediately after clicking activity */
+  // ======================= INIT & DISPOSE =======================
+  @override 
   void initState() { 
     super.initState();
     _currentIndex = 0;
@@ -88,30 +96,42 @@ class _MusicPlayerState extends State<Activity1> {
 
     _initPlayer();  
 
-    _audioPlayer.onPlayerComplete.listen((event) {
-      _nextSong();
+    _completionListener = _audioPlayer.onPlayerComplete.listen((event) {
+      if (mounted) _nextSong();
     });
 
-    /* Listen to audio duration and position for the slider: audiotags */
-    _audioPlayer.onDurationChanged.listen((d) {
-      setState(() {
-        _duration = d;
-      });
+    _durationListener = _audioPlayer.onDurationChanged.listen((d) {
+      if (mounted) {
+        setState(() {
+          _duration = d;
+        });
+      }
     });
 
-    _audioPlayer.onPositionChanged.listen((p) {
-      setState(() {
-        _position = p;
-      });
+    _positionListener = _audioPlayer.onPositionChanged.listen((p) {
+      if (mounted) {
+        setState(() {
+          _position = p;
+        });
+      }
     });
-
   }
 
+  @override
+  void dispose() {
+    // Cancel listeners before disposing so it wont crash my app T_T
+    _durationListener.cancel();
+    _positionListener.cancel();
+    _completionListener.cancel();
+
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  // ======================= SONG LOADING =======================
   Future<void> _initPlayer() async {
     await _getSongs(_songPaths);
 
-    // preload the first song to avoid ui lagging behind
-    // grabbing the songs to audioplayer and audiotags
     if (songs.isNotEmpty) {
       await _audioPlayer.setSource(
         AssetSource(songs[0].path),
@@ -142,8 +162,8 @@ class _MusicPlayerState extends State<Activity1> {
       songs.add(song);
     }
   }
-  
 
+  // ======================= PLAYER CONTROLS =======================
   Future<void> _playSong(int index) async {
     await _audioPlayer.stop();
     await _audioPlayer.play(AssetSource(songs[index].path));
@@ -179,20 +199,13 @@ class _MusicPlayerState extends State<Activity1> {
     _playSong(_currentIndex);
   }
 
-  @override
-  void dispose() {
-    _audioPlayer.dispose();
-    super.dispose();
-  }
-
-
+  // ======================= UI HELPERS =======================
   Widget getImage() {
-  if (songs.isEmpty) {
-     return Icon(Icons.music_note, size: 100,);
-  }
+    if (songs.isEmpty) {
+      return Icon(Icons.music_note, size: 100,);
+    }
 
-  SongMetadata metadata = songs[_currentIndex].metadata; 
-
+    SongMetadata metadata = songs[_currentIndex].metadata; 
     if (metadata.picture == null) {
       return Icon(Icons.music_note, size: 100,);
     }
@@ -207,14 +220,13 @@ class _MusicPlayerState extends State<Activity1> {
 
   Widget getDetails() {
     if (songs.isEmpty) {
-    return const Text(
-      "Loading...",
-      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white,),
-    );
-  }
+      return const Text(
+        "Loading...",
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white,),
+      );
+    }
 
-  SongMetadata metadata = songs[_currentIndex].metadata; 
-    // set defaults
+    SongMetadata metadata = songs[_currentIndex].metadata; 
     String title =  (metadata.title == null) ? "Unknown" : metadata.title!;
     String artist = (metadata.trackArtist == null) ? "Unknown" : metadata.trackArtist!;
     String album = (metadata.album == null) ? "Unknown" : metadata.album!;
@@ -263,19 +275,15 @@ class _MusicPlayerState extends State<Activity1> {
         ),
       ],
     );
-
   }
 
-
+  // ======================= BUILD METHOD =======================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(CupertinoIcons.clear_thick, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ), 
+        
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -291,8 +299,7 @@ class _MusicPlayerState extends State<Activity1> {
         toolbarOpacity: 0.5,
       ),
 
-
-
+      // ---------- Body ----------
       body: Container(
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 0, 0, 0),
@@ -309,6 +316,7 @@ class _MusicPlayerState extends State<Activity1> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // ---------- Image & Details ----------
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
@@ -321,6 +329,8 @@ class _MusicPlayerState extends State<Activity1> {
                   ),
 
                   SizedBox(height: 10),
+
+                  // ---------- Slider ----------
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -379,6 +389,8 @@ class _MusicPlayerState extends State<Activity1> {
                   ),
 
                   SizedBox(height: 20),
+
+                  // ---------- Controls ----------
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -428,15 +440,13 @@ class _MusicPlayerState extends State<Activity1> {
               ),
             ),
           ),
-          
         ),
-
-
-
       ),
     );
   }
-   String formatTime(Duration duration) {
+
+  // ======================= FORMAT TIME =======================
+  String formatTime(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
