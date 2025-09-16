@@ -58,6 +58,8 @@ class _MusicPlayerState extends State<Activity1> {
   Duration _position = Duration.zero;
 
   bool _isPlaying = false;
+  bool _showSongList = false;
+
 
   // docs: https://api.flutter.dev/flutter/dart-async/StreamSubscription-class.html
   late StreamSubscription<Duration> _durationListener;
@@ -310,7 +312,8 @@ class _MusicPlayerState extends State<Activity1> {
         ),
         child: Center(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            // have list and ui
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             width: 550,
             height: double.infinity,
             color: const Color.fromARGB(255, 255, 145, 0),
@@ -320,26 +323,64 @@ class _MusicPlayerState extends State<Activity1> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
+                    // list have img&details
                     color: const Color.fromARGB(255, 255, 255, 255),
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(0),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // ---------- Image & Details ----------
                         Container(
+                          // img & details
                           color: const Color.fromARGB(255, 255, 0, 0),
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            children: [
-                              getImage(),
-                              SizedBox(height: 20),
-                              getDetails(),
-                            ],
-                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          child: _showSongList
+                              ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 100,
+                                      width: 100,
+                                      child: getImage(),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(child: getDetails()),
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 500,
+                                      child: getImage(),
+                                    ),
+                                    SizedBox(height: 20),
+                                    getDetails(),
+                                  ],
+                                ),
                         ),
+
+                        if (_showSongList)
+                          Container(
+                            // list
+                            height: 476, 
+                            color: Colors.white,
+                            child: ListView.builder(
+                              itemCount: songs.length,
+                              itemBuilder: (context, index) {
+                                String songName = songs[index].metadata.title ??
+                                    songs[index].path.split("/").last.replaceAll(".mp3", "");
+                                return ListTile(
+                                  title: Text(songName),
+                                  onTap: () => _playSong(index),
+                                );
+                              },
+                            ),
+                        ),
+
                       ],
                     ),
-
                   ),
+
 
                   SizedBox(height: 10),
 
@@ -412,17 +453,12 @@ class _MusicPlayerState extends State<Activity1> {
                         iconSize: 20,
                         color: const Color.fromARGB(197, 145, 145, 145),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SongListPage(
-                                songs: _songPaths,
-                                onSongSelected: _playSong,
-                              ),
-                            ),
-                          );
+                          setState(() {
+                            _showSongList = !_showSongList;
+                          });
                         },
                       ),
+
                       SizedBox(width: 20),
                       IconButton(
                         icon: Icon(CupertinoIcons.backward_fill),
