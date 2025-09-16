@@ -27,6 +27,7 @@ class _MusicPlayerState extends State<Activity1> {
 
   bool _isPlaying = false;
   bool _showSongList = false;
+  bool _isShuffle = false;
 
   late StreamSubscription<Duration> _durationListener;
   late StreamSubscription<Duration> _positionListener;
@@ -65,7 +66,12 @@ class _MusicPlayerState extends State<Activity1> {
     _initPlayer();
 
     _completionListener = _audioPlayer.onPlayerComplete.listen((event) {
-      if (mounted) _nextSong();
+      if (!mounted) return;
+
+      if (_isShuffle) {
+        _shuffleSong(); // auto-play random song if shuffle is on
+      }
+      // if shuffle is off, stop at the end :>
     });
 
     _durationListener = _audioPlayer.onDurationChanged.listen((d) {
@@ -151,19 +157,34 @@ class _MusicPlayerState extends State<Activity1> {
     });
   }
 
+// updated functions to respect the shuffle
   void _nextSong() {
-    _currentIndex = (_currentIndex + 1) % songs.length;
-    _playSong(_currentIndex);
+    if (_isShuffle) {
+      _shuffleSong(); 
+    } else {
+      _currentIndex = (_currentIndex + 1) % songs.length;
+      _playSong(_currentIndex);
+    }
   }
 
   void _prevSong() {
-    _currentIndex = (_currentIndex - 1 + songs.length) % songs.length;
-    _playSong(_currentIndex);
+    if (_isShuffle) {
+      _shuffleSong(); 
+    } else {
+      _currentIndex = (_currentIndex - 1 + songs.length) % songs.length;
+      _playSong(_currentIndex);
+    }
   }
 
   void _shuffleSong() {
-    _currentIndex = Random().nextInt(songs.length);
-    _playSong(_currentIndex);
+    if (songs.length <= 1) return;
+
+    int newIndex = _currentIndex;
+    while (newIndex == _currentIndex) {
+      newIndex = Random().nextInt(songs.length);
+    }
+
+    _playSong(newIndex);
   }
 
   // ======================= UI HELPERS =======================
@@ -177,11 +198,14 @@ class _MusicPlayerState extends State<Activity1> {
       return const Icon(Icons.music_note, size: 100);
     }
 
-    return Image.memory(
-      metadata.picture!.bytes,
-      width: 500,
-      height: 500,
-      fit: BoxFit.cover,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5),
+      child: Image.memory(
+        metadata.picture!.bytes,
+        width: 200,
+        height: 200,
+        fit: BoxFit.cover,
+      ),
     );
   }
 
@@ -276,7 +300,8 @@ class _MusicPlayerState extends State<Activity1> {
         ),
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         toolbarHeight: 80,
-        toolbarOpacity: 0.5,
+        toolbarOpacity: 1.0,
+        elevation: 0, 
       ),
 
       // ---------- Body ----------
@@ -287,7 +312,7 @@ class _MusicPlayerState extends State<Activity1> {
         ),
         child: Center(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             width: 550,
             height: double.infinity,
             color: const Color.fromARGB(255, 0, 0, 0),
@@ -307,7 +332,7 @@ class _MusicPlayerState extends State<Activity1> {
                       // ---------- Image & Details ----------
                       Container(
                         color: const Color.fromARGB(255, 0, 0, 0),
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(5),
                         child: _showSongList
                             ? Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,8 +344,16 @@ class _MusicPlayerState extends State<Activity1> {
                                     width: 100,
                                     child: getImage(),
                                   ),
-                                  const SizedBox(width: 10),
-                                  Expanded(child: getDetails()),
+                                  const SizedBox(width: 20),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        getDetails()
+                                      ]
+                                    ),
+                                  ),
                                 ],
                               )
                             : Column(
@@ -455,10 +488,16 @@ class _MusicPlayerState extends State<Activity1> {
                     ),
                     const SizedBox(width: 20),
                     IconButton(
-                      icon: const Icon(CupertinoIcons.shuffle),
+                      icon: Icon(
+                        CupertinoIcons.shuffle,
+                        color: _isShuffle ? const Color.fromARGB(255, 255, 255, 255) : const Color.fromARGB(197, 145, 145, 145),
+                      ),
                       iconSize: 20,
-                      onPressed: _shuffleSong,
-                      color: const Color.fromARGB(197, 145, 145, 145),
+                      onPressed: () {
+                        setState(() {
+                          _isShuffle = !_isShuffle; // toggle shuffle
+                        });
+                      },
                     ),
                   ],
                 ),

@@ -21,7 +21,7 @@ class ActivityCard extends StatelessWidget {
         elevation: 8,
         color: cardColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(15),
         ),
         margin: const EdgeInsets.all(16.0),
         clipBehavior: Clip.antiAlias,

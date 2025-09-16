@@ -71,21 +71,13 @@ class Homepage extends StatelessWidget {
             ],
           ),
         ),
-        
+
       /************
       *****BODY****
       *************/
         body: Container(
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 0, 0, 0),
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(
-                25,
-              ),
-              topLeft: Radius.circular(
-                25,
-              ),
-            ),
           ),
           child: Column(
             children: [
