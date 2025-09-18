@@ -137,25 +137,34 @@ class _MusicPlayerState extends State<Activity1> {
     }
   }
 
-  Future<void> _getSongs(List<String> songPaths) async {
-    for (int i = 0; i < songPaths.length; i++) {
+Future<void> _getSongs(List<String> songPaths) async {
+  for (int i = 0; i < songPaths.length; i++) {
+    try {
       Tag? tag = await AudioTags.read(songPaths[i]);
-      
-      SongMetadata metadata = SongMetadata(null, null, null, null, null);
-      metadata.title = tag?.title;
-      metadata.trackArtist = tag?.trackArtist;
-      metadata.album = tag?.album;
-      metadata.year = tag?.year;
-      List<Picture>? pictures = tag?.pictures;
-      metadata.picture = pictures?[0];
+
+      if (tag == null) {
+        continue;
+      }
+
+      SongMetadata metadata = SongMetadata(
+        tag.title,
+        tag.trackArtist,
+        tag.album,
+        tag.year,
+        tag.pictures != null && tag.pictures!.isNotEmpty ? tag.pictures![0] : null,
+      );
 
       Song song = Song(
         metadata,
         songPaths[i].replaceFirst("assets/", ""),
       );
       songs.add(song);
+    } catch (e) {
+      continue;
     }
   }
+}
+
 
   // ======================= PLAYER CONTROLS =======================
   Future<void> _playSong(int index) async {
