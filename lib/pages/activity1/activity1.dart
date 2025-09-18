@@ -151,7 +151,7 @@ Future<void> _getSongs(List<String> songPaths) async {
         tag.trackArtist,
         tag.album,
         tag.year,
-        (tag.pictures?.isNotEmpty ?? false) ? tag.pictures![0] : null,
+        tag.pictures.isNotEmpty ? tag.pictures[0] : null,
       );
 
       Song song = Song(
@@ -489,7 +489,7 @@ Future<void> _getSongs(List<String> songPaths) async {
                       iconSize: 20,
                       onPressed: () {
                         setState(() {
-                          _isShuffle = !_isShuffle; // toggle shuffle
+                          _isShuffle = !_isShuffle;
                         });
                       },
                     ),
