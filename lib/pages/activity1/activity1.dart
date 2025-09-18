@@ -274,11 +274,12 @@ class _MusicPlayerState extends State<Activity1> {
     );
   }
 
-  // ======================= BUILD METHOD =======================
+  // // ======================= BUILD METHOD =======================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+    // -------------------------- appbar --------------------------
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(CupertinoIcons.clear_thick, color: Colors.white),
@@ -304,7 +305,7 @@ class _MusicPlayerState extends State<Activity1> {
         elevation: 0, 
       ),
 
-      // ---------- Body ----------
+    // -------------------------- body --------------------------
       body: Container(
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 0, 0, 0),
@@ -319,7 +320,7 @@ class _MusicPlayerState extends State<Activity1> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // ---------- Inner Card Container ----------
+                // ---------- Img&Details metadata and songlist container ----------
                 Container(
                   width: 500,        
                   height: 600, 
@@ -337,9 +338,7 @@ class _MusicPlayerState extends State<Activity1> {
                             ? Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    curve: Curves.easeInOut,
+                                  SizedBox(
                                     height: 100,
                                     width: 100,
                                     child: getImage(),
@@ -359,9 +358,7 @@ class _MusicPlayerState extends State<Activity1> {
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    curve: Curves.easeInOut,
+                                  SizedBox(
                                     height: 500,
                                     width: 500,
                                     child: getImage(),
@@ -456,7 +453,7 @@ class _MusicPlayerState extends State<Activity1> {
                     IconButton(
                       icon: const Icon(CupertinoIcons.list_bullet),
                       iconSize: 20,
-                      color: const Color.fromARGB(197, 145, 145, 145),
+                      color: _showSongList ? const Color.fromARGB(255, 255, 255, 255) : const Color.fromARGB(197, 145, 145, 145),
                       onPressed: () {
                         setState(() {
                           _showSongList = !_showSongList;
@@ -504,6 +501,7 @@ class _MusicPlayerState extends State<Activity1> {
               ],
             ),
           ),
+          
         ),
       ),
     );
