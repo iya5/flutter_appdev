@@ -133,6 +133,8 @@ flutter:
 | --------------------------------------------------------------------- | ------ |
 | [Flutter Official Docs](https://docs.flutter.dev/)                                                 | Main reference for all Flutter widgets and MaterialApp/Scaffold usage (`main.dart`, `homepage.dart`, `Activity1`, `ActivityCard`, etc.) |
 | [Dart Programming Language Guide](https://dart.dev/guides)                                         | Used for Dart syntax and language features throughout all files (`song_model.dart`, `activity1.dart`, etc.)  |
+| [Dart Constructors (Medium)](https://medium.com/@suatozkaya/dart-constructors-101-69c5b9db5230)     | Reference for understanding and applying Dart constructors in models like `Song` and `SongMetadata`                                           |
+| [Dart Constructors](https://dart.dev/language/constructors#generative-constructors) | Official documentation for generative constructors, used in `song_model.dart` and other classes                                             |
 | [audioplayers package](https://pub.dev/packages/audioplayers)                                      | Used for playing audio in `Activity1` (`AudioPlayer`, `_audioPlayer.play()`, etc.)  |
 | [audiotags package](https://pub.dev/packages/audiotags)                                            | Used to read metadata from audio files in `song_model.dart` and `_getSongs()` in `Activity1` |
 | [CupertinoIcons](https://api.flutter.dev/flutter/cupertino/CupertinoIcons-class.html)              | Used for icons like play, pause, backward, forward in `Activity1` and for UI elements in `Homepage`  |
@@ -144,7 +146,7 @@ flutter:
 | [MouseRegion](https://api.flutter.dev/flutter/widgets/MouseRegion-class.html)                      | Used in `SongListWidget` to implement hover effects on songs    |
 | [ListView.builder](https://api.flutter.dev/flutter/widgets/ListView/ListView.builder.html)         | Used in `SongListWidget` to display the list of songs dynamically   |
 | [StreamSubscription](https://api.flutter.dev/flutter/dart-async/StreamSubscription-class.html)     | Used in `Activity1` to listen to audio player events (`onDurationChanged`, `onPositionChanged`, `onPlayerComplete`) |
-| [static](https://medium.com/@yetesfadev/mastering-static-in-flutter-and-dart-3bd21a60fa48)     | Used in `styles` to call the text styles and colors without creating an instance of the class |
+| [static (Medium)](https://medium.com/@yetesfadev/mastering-static-in-flutter-and-dart-3bd21a60fa48)     | Used in `styles` to call the text styles and colors without creating an instance of the class |
 
 ---
 
