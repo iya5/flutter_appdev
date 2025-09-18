@@ -144,6 +144,7 @@ flutter:
 | [MouseRegion](https://api.flutter.dev/flutter/widgets/MouseRegion-class.html)                      | Used in `SongListWidget` to implement hover effects on songs    |
 | [ListView.builder](https://api.flutter.dev/flutter/widgets/ListView/ListView.builder.html)         | Used in `SongListWidget` to display the list of songs dynamically   |
 | [StreamSubscription](https://api.flutter.dev/flutter/dart-async/StreamSubscription-class.html)     | Used in `Activity1` to listen to audio player events (`onDurationChanged`, `onPositionChanged`, `onPlayerComplete`) |
+| [static](https://medium.com/@yetesfadev/mastering-static-in-flutter-and-dart-3bd21a60fa48)     | Used in `styles` to call the text styles and colors without creating an instance of the class |
 
 ---
 
