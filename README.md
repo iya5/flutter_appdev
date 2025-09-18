@@ -2,6 +2,8 @@
 
 I developed this flutter application for uni. This project will feature a modular interface with multiple activities. Currently my only progress is a functional **music player** with metadata display and playback controls.
 
+---
+
 ## Table of Contents
 - [Project Structure](#project-structure)  
 - [Features](#features)  
