@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'song_model.dart';
+import 'package:flutter_appdev/styles/color_palette.dart';
+import 'package:flutter_appdev/styles/text_styles.dart';
 
 class SongListWidget extends StatefulWidget {
   final List<Song> songs;
@@ -16,7 +18,7 @@ class SongListWidget extends StatefulWidget {
 }
 
 class _SongListWidgetState extends State<SongListWidget> {
-  int? _hoveredIndex; // track which item is hovered
+  int? _hoveredIndex; 
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,6 @@ class _SongListWidgetState extends State<SongListWidget> {
             song.path.split("/").last.replaceAll(".mp3", "");
         final artistName = song.metadata.trackArtist ?? "Unknown";
 
-        // Image for the song
         Widget songImage;
         if (song.metadata.picture != null) {
           songImage = ClipRRect(
@@ -44,8 +45,8 @@ class _SongListWidgetState extends State<SongListWidget> {
           songImage = Container(
             width: 50,
             height: 50,
-            color: const Color.fromARGB(255, 0, 0, 0),
-            child: const Icon(Icons.music_note, color: Colors.white),
+            color: ColorPalette.background,
+            child: const Icon(Icons.music_note, color: ColorPalette.iconInactive),
           );
         }
 
@@ -59,33 +60,26 @@ class _SongListWidgetState extends State<SongListWidget> {
               padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: _hoveredIndex == index
-                      ? const Color.fromARGB(29, 234, 234, 234)
-                      : const Color.fromARGB(255, 0, 0, 0),
+                      ? ColorPalette.hoveredList
+                      : ColorPalette.background,
                   borderRadius: BorderRadius.circular(4),
                 ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   songImage,
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           songName,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
+                          style: AppTextStyles.body,
                         ),
                         Text(
                           artistName,
-                          style: const TextStyle(
-                            color: Color.fromARGB(150, 255, 255, 255),
-                            fontWeight: FontWeight.w300,
-                            fontSize: 12,
-                          ),
+                          style: AppTextStyles.caption,
                         ),
                       ],
                     ),

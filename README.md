@@ -1,13 +1,13 @@
-# Flutter for App Development <sup>(in progress)</sup>
+# Flutter for App Development <sup>(WIP)</sup>
 
-I developed this flutter application for uni. This project will aim to feature a modular interface with multiple activities, and currently my only progress is a functional **music player** with metadata display and playback controls.
+I developed this flutter application for uni. This project will feature a modular interface with multiple activities. Currently my only progress is a functional **music player** with metadata display and playback controls.
 
 ---
 
 ## Table of Contents
 - [Project Structure](#project-structure)  
 - [Features](#features)  
-- [Used Widgets & Functionalities](#used-widgets--functionalities)  
+- [Used Widgets, Classes & Functionalities](#used-widgets-classes--functionalities)  
 - [Dependencies](#dependencies)  
 - [Installation Guide](#installation-guide)  
 - [Notes & Issues](#notes--issues)  
@@ -20,6 +20,9 @@ flutter_appdev/
 ├─ lib/
 │  ├─ main.dart                     # Entry point of the app
 │  ├─ homepage.dart                 # Homepage with activity cards
+│  ├─ styles/
+│  │  ├─ color_palette.dart         # Centralized color definitions
+│  │  └─ text_styles.dart           # Centralized text styles
 │  ├─ components/
 │  │  └─ activitycards.dart         # Activity card widget
 │  ├─ pages/
@@ -37,6 +40,7 @@ flutter_appdev/
 │
 ├─ pubspec.yaml                     # Flutter configuration and dependencies
 └─ README.md                        # Project documentation
+
 ```
 
 ---
@@ -44,7 +48,7 @@ flutter_appdev/
 ## Features
 
 > [!NOTE]
-> This APP is currently a work in progress!
+> This application is currently a work in progress!
 
 ### Music Player (Activity 1)
 - Play, pause, skip, previous, and shuffle songs  
@@ -61,18 +65,19 @@ flutter_appdev/
 
 ---
 
-## Used Widgets & Functionalities
+## Used Widgets, Classes & Functionalities
 
-| Feature             | Widget / Class           | Description                                                                 |
-|---------------------|--------------------------|-----------------------------------------------------------------------------|
-| Homepage            | `ActivityCard`           | Displays each activity with title, subtitle, image, and navigation link     |
-| Music Player UI     | `Activity1`              | Main StatefulWidget handling audio playback and UI interactions             |
-| Song List           | `SongListWidget`         | Displays list of songs with hover effect and tap-to-play functionality      |
-| Song Metadata       | `Song` & `SongMetadata`  | Stores song title, artist, album, and album art                       |
-| Audio Playback      | `AudioPlayer`            | Handles play, pause, skip, previous, shuffle, and seek functionality        |
+| Feature             | Widget / Class           | Description    |
+|---------------------|--------------------------|----------------|
+| Homepage            | `ActivityCard`           | Displays each activity with title, subtitle, image, and navigation link |
+| Music Player UI     | `Activity1`              | Main StatefulWidget handling audio playback and UI interactions |
+| Song List           | `SongListWidget`         | Displays list of songs with hover effect and tap-to-play functionality |
+| Song Metadata       | `Song` & `SongMetadata`  | Stores song title, artist, album, and album art    |
+| Audio Playback      | `AudioPlayer`            | Handles play, pause, skip, previous, shuffle, and seek functionality |
 | AppBar Customization| `AppBar`                 | Customized toolbar with height, opacity, and icons for navigation and settings(In progress) |
-| Slider              | `Slider`                 | Audio progress bar that allows seeking                                      |
-| Icon Controls       | `IconButton`             | Play/pause, next/previous, shuffle, toggle song list                        |
+| Slider              | `Slider`                 | Audio progress bar that allows seeking     |
+| Icon Controls       | `IconButton`             | Play/pause, next/previous, shuffle, toggle song list    |
+| Theme / Styling     | `color_palette.dart & text_styles.dart` | Centralized UI theming for colors and typography    |
 
 ---
 
@@ -141,8 +146,6 @@ flutter:
 
 ---
 
----
-
 ## 📝 Notes & Issues
 
 * **Modular Design:**
@@ -163,7 +166,7 @@ flutter:
 * **Future Improvements:**
 
   * Implement responsive layouts for smaller screens (e.g. mobile, tablet).
-  * Improve app bar customization (currently static height and opacity).
+  * Improve customization (currently static height and opacity).
   * Optimize asset loading and song metadata handling for larger libraries.
   * Use a struct for song list and circular queues to improve music player's interactivity.
 

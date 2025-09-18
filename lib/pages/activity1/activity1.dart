@@ -1,11 +1,13 @@
-import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:audiotags/audiotags.dart';
 import 'dart:math';
-import 'song_model.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:audiotags/audiotags.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_appdev/styles/color_palette.dart';
+import 'package:flutter_appdev/styles/text_styles.dart';
 import 'song_list_widget.dart';
+import 'song_model.dart';
 
 // ======================= WIDGET =======================
 class Activity1 extends StatefulWidget {
@@ -28,6 +30,8 @@ class _MusicPlayerState extends State<Activity1> {
   bool _isPlaying = false;
   bool _showSongList = false;
   bool _isShuffle = false;
+
+
 
   late StreamSubscription<Duration> _durationListener;
   late StreamSubscription<Duration> _positionListener;
@@ -101,6 +105,23 @@ class _MusicPlayerState extends State<Activity1> {
     super.dispose();
   }
 
+  /* 
+  The garbage collector doesn't force delete the widget immediately,
+  so doing dispose on the listeners isn't enough, it will crash my app.
+
+  AudioPlayer streams (onPositionChanged, onDurationChanged, etc.)
+  keep firing even after the widget is disposed. The object stays around 
+  because the stream listener is still holding a reference.
+
+  When the callback calls setState() on a disposed widget,
+  Flutter throws an error (similar in spirit to a segfault).
+  That’s why the recommended solution is to cancel those listeners in 
+  dispose() and/or guard with if (mounted) before calling setState() to
+  free the widget from gc and stray events.
+
+  subscription (or “listener”) is the link between the stream and callback.
+  */
+
   // ======================= SONG LOADING =======================
   Future<void> _initPlayer() async {
     await _getSongs(_songPaths);
@@ -119,8 +140,8 @@ class _MusicPlayerState extends State<Activity1> {
   Future<void> _getSongs(List<String> songPaths) async {
     for (int i = 0; i < songPaths.length; i++) {
       Tag? tag = await AudioTags.read(songPaths[i]);
+      
       SongMetadata metadata = SongMetadata(null, null, null, null, null);
-
       metadata.title = tag?.title;
       metadata.trackArtist = tag?.trackArtist;
       metadata.album = tag?.album;
@@ -213,11 +234,7 @@ class _MusicPlayerState extends State<Activity1> {
     if (songs.isEmpty) {
       return const Text(
         "Loading...",
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-          color: Colors.white,
-        ),
+        style: AppTextStyles.subtitle,
       );
     }
 
@@ -234,11 +251,7 @@ class _MusicPlayerState extends State<Activity1> {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.w500,
-          ),
+          style: AppTextStyles.title,
         ),
         const SizedBox(height: 4),
         Row(
@@ -246,27 +259,15 @@ class _MusicPlayerState extends State<Activity1> {
           children: [
             Text(
               artist,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 15,
-                fontWeight: FontWeight.w300,
-              ),
+              style: AppTextStyles.subtitle2,
             ),
             const Text(
               " - ",
-              style: TextStyle(
-                color: Colors.white54,
-                fontSize: 14,
-                fontWeight: FontWeight.w300,
-              ),
+              style: AppTextStyles.body2,
             ),
             Text(
               album,
-              style: const TextStyle(
-                color: Colors.white54,
-                fontSize: 14,
-                fontWeight: FontWeight.w200,
-              ),
+              style: AppTextStyles.body2,
             ),
           ],
         ),
@@ -278,7 +279,7 @@ class _MusicPlayerState extends State<Activity1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: ColorPalette.background,
     // -------------------------- appbar --------------------------
       appBar: AppBar(
         leading: IconButton(
@@ -288,14 +289,10 @@ class _MusicPlayerState extends State<Activity1> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
-            Text('Music Player', style: TextStyle(color: Colors.white)),
+            Text('Music Player', style: AppTextStyles.title),
             Text(
               'Activity 1',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.0,
-                fontWeight: FontWeight.w400,
-              ),
+              style: AppTextStyles.caption,
             ),
           ],
         ),
@@ -308,7 +305,7 @@ class _MusicPlayerState extends State<Activity1> {
     // -------------------------- body --------------------------
       body: Container(
         decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 0, 0, 0),
+          color: ColorPalette.background,
           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: Center(
@@ -316,7 +313,7 @@ class _MusicPlayerState extends State<Activity1> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             width: 550,
             height: double.infinity,
-            color: const Color.fromARGB(255, 0, 0, 0),
+            color: ColorPalette.background,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -325,14 +322,14 @@ class _MusicPlayerState extends State<Activity1> {
                   width: 500,        
                   height: 600, 
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 0, 0, 0), 
+                    color: ColorPalette.background,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // ---------- Image & Details ----------
                       Container(
-                        color: const Color.fromARGB(255, 0, 0, 0),
+                        color: ColorPalette.background,
                         padding: const EdgeInsets.all(5),
                         child: _showSongList
                             ? Row(
@@ -348,7 +345,7 @@ class _MusicPlayerState extends State<Activity1> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 4),
                                         getDetails()
                                       ]
                                     ),
@@ -375,7 +372,7 @@ class _MusicPlayerState extends State<Activity1> {
                       if (_showSongList)
                         Container(
                           height: 477,
-                          color: const Color.fromARGB(255, 0, 0, 0),
+                          color: ColorPalette.background,
                           child: SongListWidget(
                             songs: songs,
                             onSongTap: _playSong,
@@ -393,10 +390,9 @@ class _MusicPlayerState extends State<Activity1> {
                   children: [
                     SliderTheme(
                       data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: const Color.fromARGB(255, 255, 255, 255),
-                        inactiveTrackColor:
-                            const Color.fromARGB(198, 88, 88, 88),
-                        thumbColor: const Color.fromARGB(255, 255, 255, 255),
+                        activeTrackColor: ColorPalette.sliderActive,
+                        inactiveTrackColor:ColorPalette.sliderInactive,
+                        thumbColor: ColorPalette.sliderActive,
                         overlayColor: const Color.fromARGB(255, 255, 255, 255)
                             .withAlpha(32),
                         thumbShape:
@@ -424,19 +420,11 @@ class _MusicPlayerState extends State<Activity1> {
                         children: [
                           Text(
                             formatTime(_position),
-                            style: const TextStyle(
-                              color: Color.fromARGB(197, 145, 145, 145),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w300,
-                            ),
+                            style: AppTextStyles.caption,
                           ),
                           Text(
                             formatTime(_duration),
-                            style: const TextStyle(
-                              color: Color.fromARGB(197, 145, 145, 145),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w300,
-                            ),
+                            style: AppTextStyles.caption,
                           ),
                         ],
                       ),
@@ -453,7 +441,7 @@ class _MusicPlayerState extends State<Activity1> {
                     IconButton(
                       icon: const Icon(CupertinoIcons.list_bullet),
                       iconSize: 20,
-                      color: _showSongList ? const Color.fromARGB(255, 255, 255, 255) : const Color.fromARGB(197, 145, 145, 145),
+                      color: _showSongList ? ColorPalette.iconPrimary : ColorPalette.iconInactive,
                       onPressed: () {
                         setState(() {
                           _showSongList = !_showSongList;
@@ -465,7 +453,7 @@ class _MusicPlayerState extends State<Activity1> {
                       icon: const Icon(CupertinoIcons.backward_fill),
                       iconSize: 30,
                       onPressed: _prevSong,
-                      color: Colors.white,
+                      color: ColorPalette.iconPrimary
                     ),
                     const SizedBox(width: 20),
                     IconButton(
@@ -474,20 +462,20 @@ class _MusicPlayerState extends State<Activity1> {
                           : CupertinoIcons.play_arrow_solid),
                       iconSize: 45,
                       onPressed: _togglePlayPause,
-                      color: Colors.white,
+                      color: ColorPalette.iconPrimary
                     ),
                     const SizedBox(width: 20),
                     IconButton(
                       icon: const Icon(CupertinoIcons.forward_fill),
                       iconSize: 30,
                       onPressed: _nextSong,
-                      color: Colors.white,
+                      color: ColorPalette.iconPrimary
                     ),
                     const SizedBox(width: 20),
                     IconButton(
                       icon: Icon(
                         CupertinoIcons.shuffle,
-                        color: _isShuffle ? const Color.fromARGB(255, 255, 255, 255) : const Color.fromARGB(197, 145, 145, 145),
+                        color: _isShuffle ? ColorPalette.iconPrimary : ColorPalette.iconInactive,
                       ),
                       iconSize: 20,
                       onPressed: () {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_appdev/styles/color_palette.dart';
+import 'package:flutter_appdev/styles/text_styles.dart';
 import 'package:flutter_appdev/pages/activity1/activity1.dart';
 import 'package:flutter_appdev/pages/activity2.dart';
 import 'package:flutter_appdev/pages/activity3.dart';
@@ -54,16 +56,12 @@ class Homepage extends StatelessWidget {
                   children: const [
                     Text(
                       'App Development',
-                      style: TextStyle(color: Colors.white, fontSize: 28),
+                      style: AppTextStyles.headline,
                     ),
                     SizedBox(height: 15),
                     Text(
                       'C - CS302',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: AppTextStyles.subtitle,
                     ),
                   ],
                 ),
@@ -77,7 +75,7 @@ class Homepage extends StatelessWidget {
       *************/
         body: Container(
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 0, 0, 0),
+            color: ColorPalette.background,
           ),
           child: Column(
             children: [

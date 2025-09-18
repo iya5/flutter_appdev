@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_appdev/styles/color_palette.dart';
+import 'package:flutter_appdev/styles/text_styles.dart';
 
 class ActivityCard extends StatelessWidget {
   final String actTitle, subtitle, cardImage;
@@ -26,7 +28,7 @@ class ActivityCard extends StatelessWidget {
         margin: const EdgeInsets.all(16.0),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          splashColor: Colors.white.withAlpha(30),
+          splashColor:  ColorPalette.splash.withAlpha(30),
           onTap: () {
             Navigator.push(
               context,
@@ -62,17 +64,11 @@ class ActivityCard extends StatelessWidget {
                       const SizedBox(height: 5),
                       Text(
                         actTitle,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
+                        style: AppTextStyles.body,
                       ),
                       Text(
                         subtitle,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                        ),
+                        style: AppTextStyles.caption2,
                       ),
                       const SizedBox(height: 10),
                     ],
