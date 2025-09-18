@@ -1,17 +1,16 @@
-# Flutter for App Development
+# Flutter for App Development <sup>(in progress)</sup>
 
-This project is a Flutter application I developed for school. The app features a modular interface with multiple activities, and currently my only progress is a functional **music player** with metadata display and playback controls.
+I developed this flutter application for uni. This project will aim to feature a modular interface with multiple activities, and currently my only progress is a functional **music player** with metadata display and playback controls.
 
 ---
 
 ## Table of Contents
-- [Features](#features)  
 - [Project Structure](#project-structure)  
-- [Key Widgets & Functionalities](#key-widgets--functionalities)  
-- [Installation](#installation)  
-- [Usage](#usage)  
+- [Features](#features)  
+- [Used Widgets & Functionalities](#used-widgets--functionalities)  
 - [Dependencies](#dependencies)  
-- [Notes](#notes)  
+- [Installation Guide](#installation-guide)  
+- [Notes & Issues](#notes--issues)  
 
 ---
 ## Project Structure
@@ -44,6 +43,9 @@ flutter_appdev/
 
 ## Features
 
+> [!NOTE]
+> This APP is currently a work in progress!
+
 ### Music Player (Activity 1)
 - Play, pause, skip, previous, and shuffle songs  
 - Display song metadata: title, artist, album, album art  
@@ -63,7 +65,7 @@ flutter_appdev/
 
 | Feature             | Widget / Class           | Description                                                                 |
 |---------------------|--------------------------|-----------------------------------------------------------------------------|
-| Homepage Grid       | `ActivityCard`           | Displays each activity with title, subtitle, image, and navigation link     |
+| Homepage            | `ActivityCard`           | Displays each activity with title, subtitle, image, and navigation link     |
 | Music Player UI     | `Activity1`              | Main StatefulWidget handling audio playback and UI interactions             |
 | Song List           | `SongListWidget`         | Displays list of songs with hover effect and tap-to-play functionality      |
 | Song Metadata       | `Song` & `SongMetadata`  | Stores song title, artist, album, and album art                       |
@@ -150,19 +152,18 @@ flutter:
   All music files are stored in assets. Metadata is read asynchronously using the `audiotags` package. Playback and control is handled via `audioplayers`.
 
 * **Responsive UI Considerations:**
-  Most UI elements have fixed dimensions for simplicity. Some components (like album art in `Activity1`) may need adjustments for smaller screens.
+  Although most UI elements have fixed dimensions for simplicity. Some components (like album art in `Activity1`) may need adjustments for smaller screens. This should be updated and fixed.
 
 * **State Management:**
   Stateful widgets handle audio playback and UI updates (e.g., play/pause, song selection, shuffle). Stream subscriptions listen to player events.
 
 * **Hover Effects:**
-  `MouseRegion` is used to implement hover effects on songs in the song list (useful for desktop/web apps).
+  `MouseRegion` is used to implement hover effects on songs in the song list (only useful for desktop/web apps).
 
 * **Future Improvements:**
 
-  * Implement responsive layouts for mobile and tablet screens.
-  * Add more activities with real functionality.
+  * Implement responsive layouts for smaller screens (e.g. mobile, tablet).
   * Improve app bar customization (currently static height and opacity).
   * Optimize asset loading and song metadata handling for larger libraries.
-  * Use a struct for song list and circular queues.
+  * Use a struct for song list and circular queues to improve music player's interactivity.
 
