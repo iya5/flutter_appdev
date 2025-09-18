@@ -2,8 +2,6 @@
 
 I developed this flutter application for uni. This project will feature a modular interface with multiple activities. Currently my only progress is a functional **music player** with metadata display and playback controls.
 
----
-
 ## Table of Contents
 - [Project Structure](#project-structure)  
 - [Features](#features)  
@@ -43,8 +41,6 @@ flutter_appdev/
 └─ README.md                        # Project documentation
 
 ```
-
----
 
 ## Features
 
@@ -88,7 +84,6 @@ flutter_appdev/
 - `audiotags` (read metadata from audio files)  
 - `cupertino_icons` (iOS-style icons)  
 
----
 
 ## Installation Guide
 
@@ -150,7 +145,11 @@ flutter:
 
 ---
 
+<details>
+<summary>See Notes & Issues</summary>
+
 ## Notes & Issues
+
 
 * **Modular Design:**
   Each activity has its own page folder, keeping the code organized and maintainable. Components like `ActivityCard` and `SongListWidget` are reusable across pages.
@@ -174,3 +173,4 @@ flutter:
   * Optimize asset loading and song metadata handling for larger libraries.
   * Use a struct for song list and circular queues to improve music player's interactivity.
 
+</details>
