@@ -9,7 +9,8 @@ I developed this flutter application for uni. This project will feature a modula
 - [Features](#features)  
 - [Used Widgets, Classes & Functionalities](#used-widgets-classes--functionalities)  
 - [Dependencies](#dependencies)  
-- [Installation Guide](#installation-guide)  
+- [Installation Guide](#installation-guide)
+- [Links Used in This Project](#links-used-in-this-project)
 - [Notes & Issues](#notes--issues)  
 
 ---
@@ -126,7 +127,7 @@ flutter:
 ```
 ---
 
-## 🔗 Links Used in This Project
+## Links Used in This Project
 
 | Link                      | Purpose / Reference in Code               |
 | --------------------------------------------------------------------- | ------ |
@@ -146,7 +147,7 @@ flutter:
 
 ---
 
-## 📝 Notes & Issues
+## Notes & Issues
 
 * **Modular Design:**
   Each activity has its own page folder, keeping the code organized and maintainable. Components like `ActivityCard` and `SongListWidget` are reusable across pages.
