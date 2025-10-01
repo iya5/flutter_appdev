@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appdev/pages/activity1/activity1.dart';
+import 'package:flutter_appdev/pages/activity1/music_player.dart';
 import 'package:flutter_appdev/pages/activity2.dart';
 import 'package:flutter_appdev/pages/activity3.dart';
 import 'package:flutter_appdev/pages/activity4.dart';
