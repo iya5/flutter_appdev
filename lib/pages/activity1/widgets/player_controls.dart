@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '/styles/color_palette.dart';
 import '/styles/text_styles.dart';
 import '/util/util.dart';
+import '/styles/icon_sizes.dart';
+import '/styles/app_sizes.dart';
+
 
 class PlayerControls extends StatelessWidget {
   final bool isPlaying;
@@ -15,6 +18,8 @@ class PlayerControls extends StatelessWidget {
   final VoidCallback togglePlayPause;
   final VoidCallback shuffleSong;
   final VoidCallback toggleSongList;
+  final int loopMode;
+  final VoidCallback toggleLoopMode;
 
   final Duration position;
   final Duration duration;
@@ -34,17 +39,14 @@ class PlayerControls extends StatelessWidget {
     required this.position,
     required this.duration,
     required this.onSeek,
+    required this.loopMode,
+    required this.toggleLoopMode,
   });
+  
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final double sizedBoxSlider = (screenHeight * 0.01).clamp(1.0, 12.0);
-    final double sizedBoxIcon = (screenWidth * 0.03).clamp(1.0, 50.0);
-    final double outerIconSize = (screenWidth * 0.05).clamp(8.0, 24.0);
-    final double moveIconSize = (screenWidth * 0.07).clamp(12.0, 36.0);
-    final double playIconSize = (screenWidth * 0.1).clamp(16.67, 50.0);
+    final sizes = AppSizes(context);
 
     return Column(
       children: [
@@ -71,11 +73,11 @@ class PlayerControls extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: sizedBoxSlider,
+              height: AppIconSizes.sizedBoxSlider(context),
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: (screenWidth * 0.019).clamp(2.0, 20.0),
+                horizontal: (sizes.screenWidth * 0.019).clamp(2.0, 20.0),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,31 +91,35 @@ class PlayerControls extends StatelessWidget {
         ),
 
         SizedBox(
-          height: (screenHeight * 0.01).clamp(1.0, 28.0),
+          height: (sizes.screenHeight * 0.01).clamp(1.0, 28.0),
         ),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-              icon: const Icon(CupertinoIcons.list_bullet),
-              iconSize: outerIconSize,
-              color: showSongList
-                  ? ColorPalette.iconPrimary
-                  : ColorPalette.iconInactive,
-              onPressed: toggleSongList,
+              icon: Icon(
+                loopMode == 1
+                    ? CupertinoIcons.repeat_1
+                    : CupertinoIcons.repeat,
+                color: loopMode == 0
+                    ? ColorPalette.iconInactive
+                    : ColorPalette.iconPrimary,
+              ),
+              iconSize: AppIconSizes.outerIcon(context),
+              onPressed: toggleLoopMode,
             ),
 
-            SizedBox(width: sizedBoxIcon),
+            SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
 
             IconButton(
               icon: const Icon(CupertinoIcons.backward_fill),
-              iconSize: moveIconSize,
+              iconSize: AppIconSizes.moveIcon(context),
               onPressed: previousSong,
               color: ColorPalette.iconPrimary,
             ),
 
-            SizedBox(width: sizedBoxIcon),
+            SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
 
             IconButton(
               icon: Icon(
@@ -121,21 +127,21 @@ class PlayerControls extends StatelessWidget {
                     ? CupertinoIcons.pause_solid
                     : CupertinoIcons.play_arrow_solid,
               ),
-              iconSize: playIconSize,
+              iconSize: AppIconSizes.playIcon(context),
               onPressed: togglePlayPause,
               color: ColorPalette.iconPrimary,
             ),
 
-            SizedBox(width: sizedBoxIcon),
+            SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
 
             IconButton(
               icon: const Icon(CupertinoIcons.forward_fill),
-              iconSize: moveIconSize,
+              iconSize: AppIconSizes.moveIcon(context),
               onPressed: nextSong,
               color: ColorPalette.iconPrimary,
             ),
 
-            SizedBox(width: sizedBoxIcon),
+            SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
 
             IconButton(
               icon: Icon(
@@ -144,7 +150,7 @@ class PlayerControls extends StatelessWidget {
                     ? ColorPalette.iconPrimary
                     : ColorPalette.iconInactive,
               ),
-              iconSize: outerIconSize,
+              iconSize: AppIconSizes.outerIcon(context),
               onPressed: shuffleSong,
             ),
           ],

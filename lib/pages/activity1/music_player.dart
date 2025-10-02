@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:audiotags/audiotags.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter_appdev/styles/color_palette.dart';
 import 'package:flutter_appdev/styles/text_styles.dart';
 import 'song_list_page.dart';
 import 'song_model.dart';
 import 'widgets/song_cover.dart';
 import 'widgets/song_details.dart';
 import 'widgets/player_controls.dart';
+import '/styles/app_sizes.dart';
+import 'widgets/player_controls_secondary.dart';
+
 
 
 
@@ -32,6 +34,7 @@ class _MusicPlayerState extends State<Activity1> {
   bool _isPlaying = false;
   bool _showSongList = false;
   bool _isShuffle = false;
+  int _loopMode = 0; 
 
   late StreamSubscription<Duration> _durationListener;
   late StreamSubscription<Duration> _positionListener;
@@ -59,10 +62,19 @@ class _MusicPlayerState extends State<Activity1> {
       if (!mounted) return;
 
       //auto-play on by default
-      if (_isShuffle) {
-        _shuffleSong();
-      } else {
+      if (_loopMode == 1) {
+        // loop current song
+        _playSong(_currentIndex);
+      } else if (_loopMode == 2) {
+        // loop all
         _nextSong();
+      } else {
+        // no loop
+        if (_isShuffle) {
+          _shuffleSong();
+        } else {
+          _nextSong();
+        }
       }
     });
 
@@ -205,33 +217,17 @@ Future<void> _getSongs(List<String> songPaths) async {
     _playSong(newIndex);
   }
 
+  void _toggleLoopMode() {
+    setState(() {
+      _loopMode = (_loopMode + 1) % 3;
+    });
+  }
+
+
   // ======================= BUILD METHOD =======================
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final double smallCoverSize = (screenWidth * 0.1).clamp(70.0, 120.0);
-    final double coverSize = min(screenWidth * 0.5, screenHeight * 0.5).clamp(70.0, 600.0);
-
-    // ---------- song list ----------
-    final double minScalingFactor = 0.1; // x
-    final double maxScalingFactor = 0.99; // y
-
-    final double minScreenHeight = 400.0; // a
-    final double maxScreenHeight = 1200.0; // b
-
-    // x + ((screeHeight - a) / (b - a)) * (x - y)
-    double baseScaling = minScalingFactor + ((screenHeight - minScreenHeight) /
-      (maxScreenHeight - minScreenHeight)) * (maxScalingFactor - minScalingFactor);
-
-    baseScaling = baseScaling.clamp(minScalingFactor, maxScalingFactor);
-
-    final double minListHeight = screenHeight * 0.01; 
-    final double maxListHeight = screenHeight * 0.55; 
-
-    double songListHeight = (screenHeight * baseScaling).clamp(minListHeight, maxListHeight);
-
-
+    final sizes = AppSizes(context);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 0, 0),
     // -------------------------- appbar --------------------------
@@ -261,11 +257,10 @@ Future<void> _getSongs(List<String> songPaths) async {
         child: Container(
           decoration: BoxDecoration(
             color: const Color.fromARGB(255, 255, 213, 0),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
           ),
           padding: EdgeInsets.symmetric(
-            horizontal: (screenWidth * 0.03).clamp(4.0, 10.0), 
-            vertical: (screenHeight * 0.5).clamp(30.0, 60.0),
+            horizontal: (sizes.screenWidth * 0.03).clamp(4.0, 10.0), 
+            vertical: (sizes.screenHeight * 0.3).clamp(4.0, 50.0),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -277,14 +272,13 @@ Future<void> _getSongs(List<String> songPaths) async {
                   maxHeight: 1000
                 ),
                 child: Container(
-                  
                   padding: EdgeInsets.symmetric(
-                    horizontal: (screenWidth * 0.03).clamp(4.0, 10.0),
-                    vertical: (screenHeight * 0.02).clamp(4.0, 10.0),
+                    horizontal: (sizes.screenWidth * 0.02).clamp(1.0, 10.0),
+                    vertical: (sizes.screenHeight * 0.01).clamp(1.0, 10.0),
                   ),
                   color: const Color.fromARGB(255, 157, 255, 0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // ---------- Img&Details metadata and songlist container ----------
@@ -304,11 +298,11 @@ Future<void> _getSongs(List<String> songPaths) async {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
-                                          height: smallCoverSize,
-                                          width: smallCoverSize,
+                                          height: sizes.smallCoverSize,
+                                          width: sizes.smallCoverSize,
                                           child: SongCover(
                                             song: songs.isNotEmpty ? songs[_currentIndex] : null,
-                                            size: smallCoverSize,
+                                            size: sizes.smallCoverSize,
                                           ),
                                         ),
                                         const SizedBox(width: 20),
@@ -329,14 +323,14 @@ Future<void> _getSongs(List<String> songPaths) async {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         SizedBox(
-                                          height: coverSize,
-                                          width: coverSize,
+                                          height: sizes.coverSize,
+                                          width: sizes.coverSize,
                                           child: SongCover(
                                             song: songs.isNotEmpty ? songs[_currentIndex] : null,
-                                            size: coverSize, 
+                                            size: sizes.coverSize, 
                                           ),
                                         ),
-                                        SizedBox(height: (screenHeight * 0.02).clamp(5.0, 15.0)),
+                                        SizedBox(height: (sizes.screenHeight * 0.02).clamp(5.0, 15.0)),
                                         SongDetails(
                                           song: songs.isNotEmpty ? songs[_currentIndex] : null,
                                         ),
@@ -348,7 +342,7 @@ Future<void> _getSongs(List<String> songPaths) async {
                             // ---------- Song List ----------
                             if (_showSongList)
                               Container(
-                                height: songListHeight,
+                                height: sizes.songListHeight,
                                 color: const Color.fromARGB(255, 0, 0, 255),
                                 child: SongListPage(
                                   songs: songs,
@@ -365,36 +359,45 @@ Future<void> _getSongs(List<String> songPaths) async {
 
                       // ---------- Player Controls ----------
                       PlayerControls(
-                          isPlaying: _isPlaying,
-                          isShuffle: _isShuffle,
-                          showSongList: _showSongList,
-                          playSong: _playSong,
-                          nextSong: _nextSong,
-                          previousSong: _prevSong,
-                          togglePlayPause: _togglePlayPause,
-                          shuffleSong: () {
-                            setState(() => _isShuffle = !_isShuffle);
-                          },
-                          toggleSongList: () {
-                            setState(() => _showSongList = !_showSongList);
-                          },
-                          position: _position,
-                          duration: _duration,
-                          onSeek: (pos) async {
-                            await _audioPlayer.seek(pos);
-                          },
-                        ),
-
-
+                        isPlaying: _isPlaying,
+                        isShuffle: _isShuffle,
+                        showSongList: _showSongList,
+                        playSong: _playSong,
+                        nextSong: _nextSong,
+                        previousSong: _prevSong,
+                        togglePlayPause: _togglePlayPause,
+                        shuffleSong: () {
+                          setState(() => _isShuffle = !_isShuffle);
+                        },
+                        toggleSongList: () {
+                          setState(() => _showSongList = !_showSongList);
+                        },
+                        position: _position,
+                        duration: _duration,
+                        onSeek: (pos) async {
+                          await _audioPlayer.seek(pos);
+                        },
+                        loopMode: _loopMode,
+                        toggleLoopMode: _toggleLoopMode,
+                      ),
 
                     ],
                   ),
                 ),
-
-
               ),
-            ],
 
+
+              SizedBox(height: (sizes.screenHeight * 0.01).clamp(5.0, 15.0)),
+
+              PlayerControlsSecondary(
+                showSongList: _showSongList,
+                toggleSongList: () {
+                  setState(() => _showSongList = !_showSongList);
+                },
+              ),
+
+
+            ],
 
           ),
         ),

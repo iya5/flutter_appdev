@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'song_model.dart';
 import 'package:flutter_appdev/styles/color_palette.dart';
 import 'package:flutter_appdev/styles/text_styles.dart';
+import '/styles/app_sizes.dart';
 
 class SongListPage extends StatefulWidget {
   final List<Song> songs;
@@ -22,11 +23,8 @@ class _SongListWidgetState extends State<SongListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double verticalMargin = (screenHeight * 0.01).clamp(1.0, 5.0);
-    final double songImageSize = (screenWidth * 0.1).clamp(45.0, 55.0); 
-    
+    final sizes = AppSizes(context);
+
     return ListView.builder(
       itemCount: widget.songs.length,
       itemBuilder: (context, index) {
@@ -41,15 +39,15 @@ class _SongListWidgetState extends State<SongListPage> {
             borderRadius: BorderRadius.circular(8),
             child: Image.memory(
               song.metadata.picture!.bytes,
-              width: songImageSize,
-              height: songImageSize,
+              width: sizes.songImageSize,
+              height: sizes.songImageSize,
               fit: BoxFit.cover,
             ),
           );
         } else {
           songImage = Container(
-            width: songImageSize,
-            height: songImageSize,
+            width: sizes.songImageSize,
+            height: sizes.songImageSize,
             color: const Color.fromARGB(255, 128, 0, 255),
             child: const Icon(Icons.music_note, color: ColorPalette.iconInactive),
           );
@@ -61,7 +59,7 @@ class _SongListWidgetState extends State<SongListPage> {
           child: GestureDetector(
             onTap: () => widget.onSongTap(index),
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: verticalMargin),
+              margin: EdgeInsets.symmetric(vertical: sizes.verticalMargin),
               padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: _hoveredIndex == index
