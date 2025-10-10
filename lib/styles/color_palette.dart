@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class ColorPalette {
   // ---------- Backgrounds ----------
-  static const Color background = Color(0xFF000000); // main black background
+  static const Color background = Color(0xFF000000);
+  static Color musicPlayerBG = const Color(0xFF000000);
   static const Color appBar = Color(0xFF000000);
 
   // ---------- Text ----------

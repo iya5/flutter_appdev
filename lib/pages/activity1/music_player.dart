@@ -12,6 +12,7 @@ import 'widgets/song_details.dart';
 import 'widgets/controls.dart';
 import '/styles/app_sizes.dart';
 import '/styles/color_palette.dart';
+import '/styles/music_player_background.dart';
 import 'widgets/controls_secondary.dart';
 import 'services/song_service.dart';
 
@@ -33,21 +34,14 @@ class _MusicPlayerState extends State<Activity1> {
   bool _isPlaying = false;
   bool _showSongList = false;
   bool _isShuffle = false;
-  int _loopMode = 0; 
+  int _loopMode = 0;
 
   late StreamSubscription<Duration> _durationListener;
   late StreamSubscription<Duration> _positionListener;
   late StreamSubscription<void> _completionListener;
 
-  String? currentTitle;
-  String? currentTrackArtist;
-  String? currentAlbum;
-  int? currentYear;
-  Picture? picture;
-
   final List<String> _songPaths = SongRepository.songPaths;
 
-  // ======================= INIT & DISPOSE =======================
   @override
   void initState() {
     super.initState();
@@ -98,14 +92,12 @@ class _MusicPlayerState extends State<Activity1> {
     super.dispose();
   }
 
-  // ======================= SONG LOADING =======================
   Future<void> _initPlayer() async {
     songs = await SongService.loadSongs(_songPaths);
 
     if (songs.isNotEmpty) {
-      await _audioPlayer.setSource(
-        AssetSource(songs[0].path),
-      );
+      await _audioPlayer.setSource(AssetSource(songs[0].path));
+      await MusicPlayerBackground.updateFromSong(songs[0]);
 
       setState(() {
         _currentIndex = 0;
@@ -113,10 +105,12 @@ class _MusicPlayerState extends State<Activity1> {
     }
   }
 
-  // ======================= PLAYER CONTROLS =======================
+  // 🎵 UPDATED — this now updates the background color dynamically
   Future<void> _playSong(int index) async {
     await _audioPlayer.stop();
     await _audioPlayer.play(AssetSource(songs[index].path));
+
+    await MusicPlayerBackground.updateFromSong(songs[index]);
 
     setState(() {
       _currentIndex = index;
@@ -137,7 +131,7 @@ class _MusicPlayerState extends State<Activity1> {
 
   void _nextSong() {
     if (_isShuffle) {
-      _shuffleSong(); 
+      _shuffleSong();
     } else {
       _currentIndex = (_currentIndex + 1) % songs.length;
       _playSong(_currentIndex);
@@ -146,7 +140,7 @@ class _MusicPlayerState extends State<Activity1> {
 
   void _prevSong() {
     if (_isShuffle) {
-      _shuffleSong(); 
+      _shuffleSong();
     } else {
       _currentIndex = (_currentIndex - 1 + songs.length) % songs.length;
       _playSong(_currentIndex);
@@ -168,16 +162,13 @@ class _MusicPlayerState extends State<Activity1> {
     });
   }
 
-  // ======================= BUILD METHOD =======================
   @override
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
-    final bool isWide = sizes.screenWidth > 900; // breakpoint
+    final bool isWide = sizes.screenWidth > 900;
 
     return Scaffold(
-      backgroundColor: ColorPalette.background,
-
-      // -------------------------- appbar --------------------------
+      backgroundColor: ColorPalette.musicPlayerBG,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(CupertinoIcons.clear_thick, color: Colors.white),
@@ -190,204 +181,190 @@ class _MusicPlayerState extends State<Activity1> {
             Text('Activity 1', style: AppTextStyles.caption),
           ],
         ),
-        backgroundColor: ColorPalette.background,
+        backgroundColor: ColorPalette.musicPlayerBG,
         toolbarHeight: 70,
         elevation: 0,
       ),
-
-      // -------------------------- body --------------------------
-      body: isWide
-          // ========== WIDE SCREEN ==========
-          ? Row(
-              children: [
-                // ---------- L Main Player ----------
-                Expanded(
-                  flex: 2,
-                  child: _buildMainPlayer(sizes, alwaysShowList: false, isWide: isWide),
-                ),
-
-                // ---------- R Song List ----------
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    height: double.infinity,
-                    color: const Color.fromARGB(255, 0, 0, 255),
-                    child: SongListPage(
-                      songs: songs,
-                      onSongTap: _playSong,
-                    ),
-                  ),
-                ),
-              ],
-            )
-
-          // ========== NARROW SCREEN ==========
-          : Center(
-            child: _buildMainPlayer(sizes, alwaysShowList: true, isWide: isWide),
-          ),
+      body: _buildMainPlayer(sizes, alwaysShowList: true, isWide: isWide),
     );
   }
 
-  Widget _buildMainPlayer(AppSizes sizes, {required bool alwaysShowList, required bool isWide}) {
+  Widget _buildMainPlayer(AppSizes sizes,
+      {required bool alwaysShowList, required bool isWide}) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 255, 213, 0),
-      ),
-      padding: EdgeInsets.symmetric(
-        vertical: (sizes.screenHeight * 0.03).clamp(4.0, 50.0),
-      ),
-      
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600, maxHeight: 1000),
-          
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: (sizes.screenWidth * 0.02).clamp(1.0, 10.0),
-              vertical: (sizes.screenHeight * 0.01).clamp(1.0, 10.0),
-            ),
-            color: const Color.fromARGB(255, 157, 255, 0), 
-            
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                
-                Expanded(child: Container(color: Colors.transparent)),
-
-                Column(
-                  mainAxisSize: MainAxisSize.min,
+      color: ColorPalette.musicPlayerBG,
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        color: Colors.orange,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                color: ColorPalette.musicPlayerBG,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Flexible(
-                      child: Container(
-                        constraints: const BoxConstraints(minWidth: 200.0),
-                        width: double.infinity,
-                        color: const Color.fromARGB(255, 0, 94, 255),
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: (_showSongList && alwaysShowList)
-                            // Wide layout: Green + Pink (Purple inside Pink) row
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Green section
-                                  SizedBox(
-                                    height: sizes.smallCoverSize,
-                                    width: sizes.smallCoverSize,
-                                    child: SongCover(
-                                      song: songs.isNotEmpty ? songs[_currentIndex] : null,
-                                      size: sizes.smallCoverSize,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 20),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: 4),
-                                        SongDetails(
-                                          song: songs.isNotEmpty ? songs[_currentIndex] : null,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-
-                                  if (isWide)
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: (sizes.screenWidth * 0.02).clamp(1.0, 10.0),
-                                        vertical: (sizes.screenHeight * 0.3).clamp(1.0, 10.0),
-                                      ),
-                                      child: Container(
-                                        width: 200, // fixed width for song list
-                                        color: Colors.pink,
-                                        child: Container(
-                                          color: Colors.purple,
-                                          height: sizes.songListHeight,
-                                          child: SongListPage(
-                                            songs: songs,
-                                            onSongTap: _playSong,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            // Narrow layout: vertical stack
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: sizes.coverSize,
-                                    width: sizes.coverSize,
-                                    child: SongCover(
-                                      song: songs.isNotEmpty ? songs[_currentIndex] : null,
-                                      size: sizes.coverSize,
-                                    ),
-                                  ),
-                                  SizedBox(height: (sizes.screenHeight * 0.02).clamp(5.0, 15.0)),
-                                  SongDetails(
-                                    song: songs.isNotEmpty ? songs[_currentIndex] : null,
-                                  ),
-                                ],
-                              ),
-                      ),
-                    ),
-
-                    // Only show song list below in narrow mode
-                    if (_showSongList && alwaysShowList && !isWide)
-                      Container(
-                        height: sizes.songListHeight,
-                        color: const Color.fromARGB(255, 0, 0, 255),
-                        child: SongListPage(
-                          songs: songs,
-                          onSongTap: _playSong,
-                        ),
-                      ),
-
-                    const SizedBox(height: 8),
-
-                  Flexible(
-                    child: Column(
+                    Expanded(child: Container(color: Colors.transparent)),
+                    Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        PlayerControls(
-                          isPlaying: _isPlaying,
-                          isShuffle: _isShuffle,
-                          showSongList: _showSongList,
-                          playSong: _playSong,
-                          nextSong: _nextSong,
-                          previousSong: _prevSong,
-                          togglePlayPause: _togglePlayPause,
-                          shuffleSong: () => setState(() => _isShuffle = !_isShuffle),
-                          toggleSongList: () => setState(() => _showSongList = !_showSongList),
-                          position: _position,
-                          duration: _duration,
-                          onSeek: (pos) async => await _audioPlayer.seek(pos),
-                          loopMode: _loopMode,
-                          toggleLoopMode: _toggleLoopMode,
+                        Flexible(
+                          child: Container(
+                            constraints: const BoxConstraints(minWidth: 200.0),
+                            width: double.infinity,
+                            color: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: (isWide)
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: sizes.coverSize,
+                                        width: sizes.coverSize,
+                                        child: SongCover(
+                                          song: songs.isNotEmpty
+                                              ? songs[_currentIndex]
+                                              : null,
+                                          size: sizes.coverSize,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height: (sizes.screenHeight * 0.02)
+                                              .clamp(5.0, 15.0)),
+                                      SongDetails(
+                                        song: songs.isNotEmpty
+                                            ? songs[_currentIndex]
+                                            : null,
+                                      ),
+                                    ],
+                                  )
+                                : (_showSongList && alwaysShowList)
+                                    ? Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            height: sizes.smallCoverSize,
+                                            width: sizes.smallCoverSize,
+                                            child: SongCover(
+                                              song: songs.isNotEmpty
+                                                  ? songs[_currentIndex]
+                                                  : null,
+                                              size: sizes.smallCoverSize,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 20),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(height: 4),
+                                                SongDetails(
+                                                  song: songs.isNotEmpty
+                                                      ? songs[_currentIndex]
+                                                      : null,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: sizes.coverSize,
+                                            width: sizes.coverSize,
+                                            child: SongCover(
+                                              song: songs.isNotEmpty
+                                                  ? songs[_currentIndex]
+                                                  : null,
+                                              size: sizes.coverSize,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                              height:
+                                                  (sizes.screenHeight * 0.02)
+                                                      .clamp(5.0, 15.0)),
+                                          SongDetails(
+                                            song: songs.isNotEmpty
+                                                ? songs[_currentIndex]
+                                                : null,
+                                          ),
+                                        ],
+                                      ),
+                          ),
                         ),
-
-                        SizedBox(height: (sizes.screenHeight * 0.01).clamp(5.0, 15.0)),
-
-                        PlayerControlsSecondary(
-                          showSongList: _showSongList,
-                          toggleSongList: () => setState(() => _showSongList = !_showSongList),
+                        if (_showSongList && alwaysShowList && !isWide)
+                          Container(
+                            height: sizes.songListHeight,
+                            color: Colors.transparent,
+                            child: SongListPage(
+                              songs: songs,
+                              onSongTap: _playSong,
+                            ),
+                          ),
+                        const SizedBox(height: 8),
+                        Flexible(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              PlayerControls(
+                                isPlaying: _isPlaying,
+                                isShuffle: _isShuffle,
+                                showSongList: _showSongList,
+                                playSong: _playSong,
+                                nextSong: _nextSong,
+                                previousSong: _prevSong,
+                                togglePlayPause: _togglePlayPause,
+                                shuffleSong: () =>
+                                    setState(() => _isShuffle = !_isShuffle),
+                                toggleSongList: () =>
+                                    setState(() => _showSongList = !_showSongList),
+                                position: _position,
+                                duration: _duration,
+                                onSeek: (pos) async =>
+                                    await _audioPlayer.seek(pos),
+                                loopMode: _loopMode,
+                                toggleLoopMode: _toggleLoopMode,
+                              ),
+                              SizedBox(
+                                  height: (sizes.screenHeight * 0.01)
+                                      .clamp(5.0, 15.0)),
+                              PlayerControlsSecondary(
+                                showSongList: _showSongList,
+                                toggleSongList: () =>
+                                    setState(() => _showSongList = !_showSongList),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                   ),
-
-
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+            if (isWide)
+              Expanded(
+                flex: 1,
+                child: Container(
+                  height: double.infinity,
+                  color: ColorPalette.musicPlayerBG,
+                  child: SongListPage(
+                    songs: songs,
+                    onSongTap: _playSong,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
   }
-
 }
-

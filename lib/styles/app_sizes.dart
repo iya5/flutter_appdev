@@ -30,8 +30,8 @@ class AppSizes {
     return scaling.clamp(_minScalingFactor, _maxScalingFactor);
   }
 
-  double get minListHeight => screenHeight * 0.1;
-  double get maxListHeight => screenHeight * 0.4;
+  double get minListHeight => screenHeight * 0.33;
+  double get maxListHeight => screenHeight * 0.58;
 
   double get songListHeight =>
       (screenHeight * baseScaling).clamp(minListHeight, maxListHeight);
@@ -42,7 +42,7 @@ class AppSizes {
 
 
   double get bottomControlHeight {
-    double height = screenHeight * 0.05; 
+    double height = screenHeight * 0.06; 
     return height.clamp(minHeightBtmControl, maxHeightBtmControl);
   }
 
