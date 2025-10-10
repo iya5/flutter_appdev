@@ -9,7 +9,7 @@ class PlayerService {
   int currentIndex = 0;
   bool isPlaying = false;
   bool isShuffle = false;
-  int loopMode = 0; // 0 = no loop, 1 = loop one, 2 = loop all
+  int loopMode = 0; 
 
   PlayerService(this.songs);
 
