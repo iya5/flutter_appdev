@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '/styles/color_palette.dart';
 import '/styles/icon_sizes.dart';
 import '/styles/app_sizes.dart';
+import '/styles/music_player_background.dart';
 
 
 class PlayerControlsSecondary extends StatelessWidget {
@@ -21,7 +22,7 @@ class PlayerControlsSecondary extends StatelessWidget {
     final sizes = AppSizes(context);
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 0, 255, 217),
+        color: ColorPalette.musicPlayerBG,
       ),
       
       height: sizes.bottomControlHeight,
