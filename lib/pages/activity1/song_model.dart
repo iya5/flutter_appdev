@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:audiotags/audiotags.dart';
 
 class SongRepository {
-	static const List<String> songPaths = [
-		"assets/music/1 TO 10.mp3",
+  static const List<String> songPaths = [
+    "assets/music/1 TO 10.mp3",
     "assets/music/AVOCADO (feat. Gliiico).mp3",
     "assets/music/Alcohol-Free.mp3",
     "assets/music/Celebrate.mp3",
@@ -16,13 +17,12 @@ class SongRepository {
     "assets/music/빨간 맛 Red Flavor.mp3",
     "assets/music/행복 (Happiness).mp3",
     "assets/music/SAY YOU LOVE ME.mp3",
-	];
+  ];
 }
 
 class Song {
   SongMetadata metadata;
   String path;
-
   Song(this.metadata, this.path);
 }
 

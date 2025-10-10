@@ -23,7 +23,7 @@ class PlayerControlsSecondary extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 0, 255, 217),
       ),
-      width: 600,
+      
       height: sizes.bottomControlHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,7 +41,7 @@ class PlayerControlsSecondary extends StatelessWidget {
             icon: const Icon(CupertinoIcons.list_bullet),
             iconSize: AppIconSizes.outerIcon(context),
             onPressed: toggleSongList,
-            color: ColorPalette.iconPrimary,
+            color: showSongList ? ColorPalette.iconPrimary : ColorPalette.iconInactive,
           ),
         ],
       ),
