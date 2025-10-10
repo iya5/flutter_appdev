@@ -6,7 +6,7 @@ class MusicPlayerBackground {
   static Future<void> updateFromSong(Song song) async {
     final picture = song.metadata.picture;
 
-    // 🖼 No album art → fallback to black
+    // no album art → fallback to black
     if (picture == null) {
       ColorPalette.musicPlayerBG = const Color(0xFF000000);
       return;
