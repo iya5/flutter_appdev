@@ -105,7 +105,6 @@ class _MusicPlayerState extends State<Activity1> {
     }
   }
 
-  // 🎵 UPDATED — this now updates the background color dynamically
   Future<void> _playSong(int index) async {
     await _audioPlayer.stop();
     await _audioPlayer.play(AssetSource(songs[index].path));
