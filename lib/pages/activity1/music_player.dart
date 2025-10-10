@@ -11,6 +11,7 @@ import 'widgets/song_cover.dart';
 import 'widgets/song_details.dart';
 import 'widgets/controls.dart';
 import '/styles/app_sizes.dart';
+import '/styles/color_palette.dart';
 import 'widgets/controls_secondary.dart';
 import 'services/song_service.dart';
 
@@ -45,7 +46,6 @@ class _MusicPlayerState extends State<Activity1> {
   Picture? picture;
 
   final List<String> _songPaths = SongRepository.songPaths;
-  Color _backgroundColor = const Color(0xFF121212); 
 
   // ======================= INIT & DISPOSE =======================
   @override
@@ -175,7 +175,7 @@ class _MusicPlayerState extends State<Activity1> {
     final bool isWide = sizes.screenWidth > 900; // breakpoint
 
     return Scaffold(
-      backgroundColor: _backgroundColor,
+      backgroundColor: ColorPalette.background,
 
       // -------------------------- appbar --------------------------
       appBar: AppBar(
@@ -190,7 +190,7 @@ class _MusicPlayerState extends State<Activity1> {
             Text('Activity 1', style: AppTextStyles.caption),
           ],
         ),
-        backgroundColor: _backgroundColor,
+        backgroundColor: ColorPalette.background,
         toolbarHeight: 70,
         elevation: 0,
       ),
