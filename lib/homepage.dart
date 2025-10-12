@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_appdev/pages/activity1/music_player.dart';
-import 'package:flutter_appdev/pages/activity2.dart';
-import 'package:flutter_appdev/pages/activity3.dart';
-import 'package:flutter_appdev/pages/activity4.dart';
+import 'package:flutter_appdev/pages/unused%20pages/activity2.dart';
+import 'package:flutter_appdev/pages/unused%20pages/activity3.dart';
+import 'package:flutter_appdev/pages/unused%20pages/activity4.dart';
 import 'package:flutter_appdev/components/activitycards.dart';
 import '/styles/text_styles.dart';
 
