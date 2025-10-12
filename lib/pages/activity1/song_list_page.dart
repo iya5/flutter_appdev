@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'song_model.dart';
 import 'package:flutter_appdev/styles/color_palette.dart';
 import 'package:flutter_appdev/styles/text_styles.dart';
+import '/styles/app_sizes.dart';
 
-class SongListWidget extends StatefulWidget {
+class SongListPage extends StatefulWidget {
   final List<Song> songs;
-  final Function(int) onSongTap;
+  final void Function(int) onSongTap;
 
-  const SongListWidget({
+  const SongListPage({
     super.key,
     required this.songs,
     required this.onSongTap,
@@ -17,11 +18,13 @@ class SongListWidget extends StatefulWidget {
   _SongListWidgetState createState() => _SongListWidgetState();
 }
 
-class _SongListWidgetState extends State<SongListWidget> {
-  int? _hoveredIndex; 
+class _SongListWidgetState extends State<SongListPage> {
+  int? _hoveredIndex;
 
   @override
   Widget build(BuildContext context) {
+    final sizes = AppSizes(context);
+
     return ListView.builder(
       itemCount: widget.songs.length,
       itemBuilder: (context, index) {
@@ -36,16 +39,16 @@ class _SongListWidgetState extends State<SongListWidget> {
             borderRadius: BorderRadius.circular(8),
             child: Image.memory(
               song.metadata.picture!.bytes,
-              width: 50,
-              height: 50,
+              width: sizes.songImageSize,
+              height: sizes.songImageSize,
               fit: BoxFit.cover,
             ),
           );
         } else {
           songImage = Container(
-            width: 50,
-            height: 50,
-            color: ColorPalette.background,
+            width: sizes.songImageSize,
+            height: sizes.songImageSize,
+            color: Colors.transparent,
             child: const Icon(Icons.music_note, color: ColorPalette.iconInactive),
           );
         }
@@ -56,19 +59,19 @@ class _SongListWidgetState extends State<SongListWidget> {
           child: GestureDetector(
             onTap: () => widget.onSongTap(index),
             child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              padding: const EdgeInsets.all(8),
+              margin: EdgeInsets.symmetric(vertical: sizes.verticalMargin),
+              padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: _hoveredIndex == index
                       ? ColorPalette.hoveredList
-                      : ColorPalette.background,
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
                 ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   songImage,
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
