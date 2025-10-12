@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:audiotags/audiotags.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_appdev/styles/text_styles.dart';
 import 'song_list_page.dart';
@@ -194,7 +193,7 @@ class _MusicPlayerState extends State<Activity1> {
       color: ColorPalette.musicPlayerBG,
       padding: const EdgeInsets.all(10),
       child: Container(
-        color: Colors.orange,
+        color: ColorPalette.musicPlayerBG,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -48,7 +48,7 @@ class _SongListWidgetState extends State<SongListPage> {
           songImage = Container(
             width: sizes.songImageSize,
             height: sizes.songImageSize,
-            color: const Color.fromARGB(255, 128, 0, 255),
+            color: ColorPalette.musicPlayerBG,
             child: const Icon(Icons.music_note, color: ColorPalette.iconInactive),
           );
         }
@@ -63,8 +63,8 @@ class _SongListWidgetState extends State<SongListPage> {
               padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: _hoveredIndex == index
-                      ? const Color.fromARGB(255, 255, 0, 225)
-                      : const Color.fromARGB(255, 162, 0, 255),
+                      ? ColorPalette.hoveredList
+                      : ColorPalette.musicPlayerBG,
                   borderRadius: BorderRadius.circular(4),
                 ),
               child: Row(
