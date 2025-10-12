@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '/styles/color_palette.dart';
 import '/styles/icon_sizes.dart';
 import '/styles/app_sizes.dart';
-import '../../../styles/music_player_bg.dart';
-
 
 class PlayerControlsSecondary extends StatelessWidget {
   final bool showSongList;
