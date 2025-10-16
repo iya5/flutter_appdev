@@ -29,7 +29,7 @@ class MusicPlayerState extends State<Activity1> {
   @override
   void initState() {
     super.initState();
-    player.loadSongs(songPaths);
+    player.loadSongs(SONG_DATA);
     if (PLAY_ON_FIRST_LOAD) player.play(0);
   }
 

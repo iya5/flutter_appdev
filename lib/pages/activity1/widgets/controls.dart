@@ -87,8 +87,7 @@ class PlayerControlsState extends State<PlayerControls> {
       ]
     );
   }
-  // TODO
-  // when in wide mode, text is right next to each other when it shouldn't be
+
   Widget buildPlaybackProgress(BuildContext context) {
     return Column(
       children: [

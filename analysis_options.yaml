@@ -4,4 +4,5 @@ analyzer:
     avoid_print: ignore
     depend_on_referenced_packages: ignore
     no_leading_underscores_for_local_identifiers: ignore
+    non_constant_identifier_names: ignore
     prefer_is_empty: ignore

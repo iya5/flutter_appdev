@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'package:flutter_appdev/pages/activity1/song.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'song.dart';
 
 enum loopState { 
   off, 
@@ -40,9 +39,10 @@ class Mp3Player {
     volume = value;
   }
 
-  Future<void> loadSongs(List<String> paths) async {
-    for (int i = 0; i < paths.length; i++) {
-      Song song = songCreate(paths[i]);
+  Future<void> loadSongs(List<SongData> songData) async {
+    for (int i = 0; i < songData.length; i++) {
+      print(songData[i].title);
+      Song song = songCreate(songData[i]);
       songs.add(song);
       originalPlaylist.add(song);
     }
