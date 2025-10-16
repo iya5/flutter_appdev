@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:flutter/widgets.dart';
-import 'config.dart';
 
 const List<String> songPaths = [
   "assets/music/1 TO 10.mp3",
