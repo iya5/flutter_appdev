@@ -126,13 +126,12 @@ class MusicPlayerState extends State<Activity1> {
         children: [
           PlayerControls(player: player, updateParentWidget: () => setState(() {}), palette: palette),
           SizedBox(height: (sizes.screenHeight * 0.01).clamp(5.0, 15.0)),
-          if(!isWide)
           PlayerControlsSecondary(
             showSongList: showSongList,
             lightMode: lightMode,
-            toggleSongList: () => setState(() => showSongList = !showSongList),
-            toggleLightMode: () => setState(() => lightMode = !lightMode), 
+            toggleLightMode: () => setState(() => lightMode = !lightMode),
             palette: palette,
+            toggleSongList: isWide ? null : () => setState(() => showSongList = !showSongList),
           ),
       ],
     ));

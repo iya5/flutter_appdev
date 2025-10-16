@@ -241,7 +241,7 @@ class PlayerControlsState extends State<PlayerControls> {
 class PlayerControlsSecondary extends StatelessWidget {
   final bool showSongList;
   final bool lightMode;
-  final VoidCallback toggleSongList;
+  final VoidCallback? toggleSongList;
   final VoidCallback toggleLightMode;
   final ColorPalette palette;
 
@@ -270,12 +270,13 @@ class PlayerControlsSecondary extends StatelessWidget {
             color: lightMode ? palette.iconPrimary : palette.iconInactive, 
           ),
 
-          IconButton(
-            icon: const Icon(CupertinoIcons.list_bullet),
-            iconSize: AppIconSizes.outerIcon(context),
-            onPressed: toggleSongList,
-            color: showSongList ? palette.iconPrimary : palette.iconInactive,
-          ),
+          if (toggleSongList != null)
+            IconButton(
+              icon: const Icon(CupertinoIcons.list_bullet),
+              iconSize: AppIconSizes.outerIcon(context),
+              onPressed: toggleSongList,
+              color: showSongList ? palette.iconPrimary : palette.iconInactive,
+            ),
         ],
       ),
 
