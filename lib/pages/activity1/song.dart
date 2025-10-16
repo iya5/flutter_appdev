@@ -160,13 +160,6 @@ List<SongData> SONG_DATA = [
     duration: Duration(seconds: 214),
   ),
   SongData(
-    title: "Test File",
-    path: 'assets/music/debug-file.mp3',
-    artist: 'test-artist',
-    album: 'test-album',
-    duration: Duration(seconds: 6),
-  ),
-  SongData(
     title: "러시안 룰렛 Russian Roulette",
     path: 'assets/music/러시안 룰렛 Russian Roulette.mp3',
     artist: 'Red Velvet',
@@ -189,5 +182,12 @@ List<SongData> SONG_DATA = [
     cover_path: 'assets/music/cover/Happiness.jpg',
     album: 'Happiness',
     duration: Duration(seconds: 220),
+  ),
+  SongData(
+    title: "Test File",
+    path: 'assets/music/debug-file.mp3',
+    artist: 'test-artist',
+    album: 'test-album',
+    duration: Duration(seconds: 6),
   ),
 ];
