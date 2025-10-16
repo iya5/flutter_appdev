@@ -93,6 +93,7 @@ class PlayerControlsState extends State<PlayerControls> {
     return Column(
       children: [
         buildSeekbar(context),
+        SizedBox(height: 3),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

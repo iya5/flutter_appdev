@@ -53,7 +53,7 @@ class MusicPlayerState extends State<Activity1> {
       appBar: buildAppBar(),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(sizes.mainPadding),
           child: isWide
               ? buildWideLayout(sizes, palette)
               : buildNormalLayout(sizes, palette),
@@ -67,7 +67,7 @@ class MusicPlayerState extends State<Activity1> {
     return Row(
       children: [
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Column(
             
             //mainAxisAlignment: MainAxisAlignment.end,
@@ -216,7 +216,7 @@ class MusicPlayerState extends State<Activity1> {
           Text('Activity 1', style: AppTextStyles.caption(palette: palette)),
         ],
       ),
-      backgroundColor: palette.background,
+      backgroundColor: palette.appBar,
       toolbarHeight: 70,
       elevation: 0,
     );

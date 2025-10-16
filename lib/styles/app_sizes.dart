@@ -44,5 +44,6 @@ class AppSizes {
 
   double get verticalMargin => (screenHeight * 0.009).clamp(1.0, 2.0);
   double get songImageSize => (screenWidth * 0.1).clamp(45.0, 55.0); 
+  double get mainPadding => (screenWidth * 0.05).clamp(8.0, 20.0); 
 
 }

@@ -40,8 +40,8 @@ class ColorPalette {
 
   // ---------- DARK THEME ----------
   static const dark = ColorPalette(
-    background: Color(0xFF000000),
-    appBar: Color(0xFF000000),
+    background: Color.fromARGB(255, 0, 0, 0),
+    appBar: Color.fromARGB(255, 0, 0, 0),
     textPrimary: Colors.white,
     textSecondary: Color.fromARGB(130, 255, 255, 255),
     textSubtitle: Colors.white70,
@@ -56,8 +56,8 @@ class ColorPalette {
 
   // ---------- LIGHT THEME ----------
   static const light = ColorPalette(
-    background: Color(0xFFFFFFFF),
-    appBar: Color(0xFFFFFFFF),
+    background: Color.fromARGB(255, 255, 255, 255),
+    appBar: Color.fromARGB(255, 255, 255, 255),
     textPrimary: Colors.black,
     textSecondary: Color.fromARGB(180, 0, 0, 0),
     textSubtitle: Colors.black87,
