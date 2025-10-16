@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
-import 'song_model.dart';
+import 'package:flutter_appdev/pages/activity1/music_service.dart';
+import 'package:flutter_appdev/pages/activity1/widgets/song_cover.dart';
 import 'package:flutter_appdev/styles/color_palette.dart';
 import 'package:flutter_appdev/styles/text_styles.dart';
 import '/styles/app_sizes.dart';
 
 class SongListPage extends StatefulWidget {
-  final List<Song> songs;
-  final void Function(int) onSongTap;
+  final Mp3Player player;
+  final VoidCallback updateParentWidget;
 
   const SongListPage({
     super.key,
-    required this.songs,
-    required this.onSongTap,
+    required this.player,
+    required this.updateParentWidget,
   });
 
   @override
-  _SongListWidgetState createState() => _SongListWidgetState();
+  SongListWidgetState createState() => SongListWidgetState();
 }
 
-class _SongListWidgetState extends State<SongListPage> {
-  int? _hoveredIndex;
+class SongListWidgetState extends State<SongListPage> {
+  int? hoveredIndex;
 
   @override
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
 
     return ListView.builder(
-      itemCount: widget.songs.length,
+      itemCount: widget.player.songs.length,
       itemBuilder: (context, index) {
-        final song = widget.songs[index];
-        final songName = song.metadata.title ??
-            song.path.split("/").last.replaceAll(".mp3", "");
-        final artistName = song.metadata.trackArtist ?? "Unknown";
-
-        Widget songImage;
+        final song = widget.player.songs[index];
+        
+        Widget songCover = SongCover(song: song);
+        /*
         if (song.metadata.picture != null) {
           songImage = ClipRRect(
             borderRadius: BorderRadius.circular(8),
@@ -52,17 +51,21 @@ class _SongListWidgetState extends State<SongListPage> {
             child: const Icon(Icons.music_note, color: ColorPalette.iconInactive),
           );
         }
+        */
 
         return MouseRegion(
-          onEnter: (_) => setState(() => _hoveredIndex = index),
-          onExit: (_) => setState(() => _hoveredIndex = null),
+          onEnter: (_) => setState(() => hoveredIndex = index),
+          onExit: (_) => setState(() => hoveredIndex = null),
           child: GestureDetector(
-            onTap: () => widget.onSongTap(index),
+            onTap: () {
+              widget.player.play(index);
+              widget.updateParentWidget();
+            },
             child: Container(
               margin: EdgeInsets.symmetric(vertical: sizes.verticalMargin),
               padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: _hoveredIndex == index
+                  color: hoveredIndex == index
                       ? ColorPalette.hoveredList
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
@@ -70,18 +73,18 @@ class _SongListWidgetState extends State<SongListPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  songImage,
+                  songCover,
                   SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          songName,
+                          song.title,
                           style: AppTextStyles.body,
                         ),
                         Text(
-                          artistName,
+                          song.artist,
                           style: AppTextStyles.caption,
                         ),
                       ],

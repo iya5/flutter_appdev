@@ -28,4 +28,13 @@ class ColorPalette {
   // ---------- Effects ----------
   static const Color splash = Colors.white;
   static const Color hoveredList = Color.fromARGB(40, 255, 255, 255);
+
+  // ---------- Debug ----------
+  static const Color debugR = Colors.white;
+  static const Color debugO = Colors.white;
+  static const Color debugY = Colors.white;
+  static const Color debugG = Colors.white;
+  static const Color debugB = Colors.white;
+  static const Color debugPr = Colors.white;
+  static const Color debugPn = Colors.white;
 }
