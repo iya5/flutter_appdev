@@ -6,6 +6,7 @@ import 'package:flutter_appdev/pages/activity1/music_service.dart';
 import 'package:flutter_appdev/pages/activity1/song_list_page.dart';
 import 'package:flutter_appdev/pages/activity1/widgets/controls.dart';
 import 'package:flutter_appdev/pages/activity1/widgets/song_cover.dart';
+import 'package:flutter_appdev/pages/activity1/widgets/song_details.dart';
 import 'package:flutter_appdev/styles/text_styles.dart';
 import '/styles/app_sizes.dart';
 import 'song.dart';
@@ -74,6 +75,7 @@ class MusicPlayerState extends State<Activity1> {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            buildSongMetadata(sizes),
             buildControls(player, sizes),
           ],
         ),
@@ -86,6 +88,9 @@ class MusicPlayerState extends State<Activity1> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        (showSongList)
+          ? buildSongMetadataSmall(sizes)
+          : buildSongMetadata(sizes),
         buildSongListSection(sizes),
         buildControls(player, sizes),
         const SizedBox(height: 8),
@@ -119,6 +124,53 @@ class MusicPlayerState extends State<Activity1> {
           updateParentWidget: () => setState(() {}),
         ),
       ),
+    );
+  }
+
+  Widget buildSongMetadata(AppSizes sizes) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: sizes.coverSize,
+          width: sizes.coverSize,
+          child: SongCover(
+            song: player.getCurrentSong(),
+            size: sizes.coverSize,
+          ),
+        ),
+        SizedBox(height: (sizes.screenHeight * 0.02).clamp(5.0, 15.0)),
+        SongDetails(song: player.getCurrentSong()),
+      ],
+    );
+  }
+
+  Widget buildSongMetadataSmall(AppSizes sizes) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: sizes.smallCoverSize,
+          width: sizes.smallCoverSize,
+          child: SongCover(
+            song: player.getCurrentSong(),
+            size: sizes.smallCoverSize,
+          ),
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          child: Column(
+            mainAxisAlignment:
+                MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 4),
+              SongDetails(
+                song: player.getCurrentSong()
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
   
@@ -268,6 +320,7 @@ class MusicPlayerState extends State<Activity1> {
                                           ),
                                         ],
                                       ),
+                                      
                           ),
                         ),
                         if (_showSongList && alwaysShowList && !isWide)

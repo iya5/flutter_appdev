@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appdev/pages/activity1/music_service.dart';
@@ -58,14 +59,18 @@ class PlayerControlsState extends State<PlayerControls> {
     completeStream = player.audio.onPlayerComplete.listen((_) async {
       if (player.looped == loopState.onPlaylist) {
         await player.next();
-        setState(() {});
+        widget.updateParentWidget();
       } else if (player.looped == loopState.onSong) {
         await player.repeat();
+        widget.updateParentWidget();
+      } else {
+        await player.next();
+        await player.prev();
+        await player.pause();
+        widget.updateParentWidget();
         setState(() {});
       }
-      // bug when loop state is off and song completes. unable to update button
-      // when it completes(loop button)
-      // do i need access to duration stream to fix this?
+      
     });
   }
 
@@ -176,7 +181,7 @@ class PlayerControlsState extends State<PlayerControls> {
       iconSize: AppIconSizes.moveIcon(context),
       onPressed: () async {
         await player.next();
-        setState(() {});
+        widget.updateParentWidget();
       },
       color: ColorPalette.iconPrimary,
     );

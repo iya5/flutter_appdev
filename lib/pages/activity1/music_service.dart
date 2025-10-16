@@ -189,6 +189,9 @@ class Mp3Player {
       await pause();
     }
 
+    // seek timeout occurs Future not completed
+    // this only occurs when loop state is off
+    // bug!
     await audio.seek(position);
     currentPosition = position;
 
