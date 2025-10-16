@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_appdev/pages/activity1/config.dart';
 import 'package:flutter_appdev/pages/activity1/music_service.dart';
 import 'package:flutter_appdev/pages/activity1/song_list_page.dart';
 import 'package:flutter_appdev/pages/activity1/widgets/controls.dart';
@@ -25,14 +26,11 @@ class MusicPlayerState extends State<Activity1> {
   late StreamSubscription<Duration> positionListener;
   late StreamSubscription<void> completionListener;
 
-  bool showSongList = false;
-  bool lightMode = false;
-
   @override
   void initState() {
     super.initState();
     player.loadSongs(songPaths);
-    player.play(0);
+    if (PLAY_ON_FIRST_LOAD) player.play(0);
   }
 
   @override
@@ -46,7 +44,7 @@ class MusicPlayerState extends State<Activity1> {
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
     final bool isWide = sizes.screenWidth > 790;
-    final palette = lightMode ? ColorPalette.light : ColorPalette.dark;
+    final palette = LIGHT_MODE ? ColorPalette.light : ColorPalette.dark;
 
     return Scaffold(
       backgroundColor: palette.background,
@@ -100,13 +98,13 @@ class MusicPlayerState extends State<Activity1> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Spacer(),
-        (showSongList)
+        (SHOW_SONG_LIST)
           ? buildSongMetadataSmall(sizes, palette)
           : buildSongCover(sizes),
         buildSongListSection(sizes),
-        if(!showSongList)
+        if(!SHOW_SONG_LIST)
         const Spacer(),
-        if (!showSongList)
+        if (!SHOW_SONG_LIST)
         SongDetails(song: player.getCurrentSong(), palette: palette),
 
         SizedBox(height: (sizes.screenHeight * 0.02).clamp(10.0, 15.0)),
@@ -118,7 +116,7 @@ class MusicPlayerState extends State<Activity1> {
   Widget buildControls(Mp3Player player, AppSizes sizes) {
     final sizes = AppSizes(context);
     final bool isWide = sizes.screenWidth > 790;
-    final palette = lightMode ? ColorPalette.light : ColorPalette.dark;
+    final palette = LIGHT_MODE ? ColorPalette.light : ColorPalette.dark;
 
     return Container(
       width: sizes.screenWidth,
@@ -127,11 +125,11 @@ class MusicPlayerState extends State<Activity1> {
           PlayerControls(player: player, updateParentWidget: () => setState(() {}), palette: palette),
           SizedBox(height: (sizes.screenHeight * 0.01).clamp(5.0, 15.0)),
           PlayerControlsSecondary(
-            showSongList: showSongList,
-            lightMode: lightMode,
-            toggleLightMode: () => setState(() => lightMode = !lightMode),
+            showSongList: SHOW_SONG_LIST,
+            lightMode: LIGHT_MODE,
+            toggleLightMode: () => setState(() => LIGHT_MODE = !LIGHT_MODE),
             palette: palette,
-            toggleSongList: isWide ? null : () => setState(() => showSongList = !showSongList),
+            toggleSongList: isWide ? null : () => setState(() => SHOW_SONG_LIST = !SHOW_SONG_LIST),
           ),
       ],
     ));
@@ -142,7 +140,7 @@ class MusicPlayerState extends State<Activity1> {
       height: double.infinity,
       child: SongListPage(
         player: player,
-        updateParentWidget: () => setState(() {}), lightMode: lightMode,
+        updateParentWidget: () => setState(() {}), lightMode: LIGHT_MODE,
       ),
     );
   }
@@ -191,19 +189,19 @@ class MusicPlayerState extends State<Activity1> {
   }
   
   Widget buildSongListSection(AppSizes sizes) {
-    if (!showSongList) return const SizedBox(height: 0);
+    if (!SHOW_SONG_LIST) return const SizedBox(height: 0);
 
     return Container(
       height: sizes.songListHeight,
       child: SongListPage(
         player: player,
-        updateParentWidget: () => setState(() {}), lightMode: lightMode,
+        updateParentWidget: () => setState(() {}), lightMode: LIGHT_MODE,
       ),
     );
   }
 
   PreferredSizeWidget? buildAppBar() {
-    final palette = lightMode ? ColorPalette.light : ColorPalette.dark;
+    final palette = LIGHT_MODE ? ColorPalette.light : ColorPalette.dark;
     return AppBar(
       leading: IconButton(
         icon: Icon(CupertinoIcons.clear_thick, color: palette.iconPrimary),

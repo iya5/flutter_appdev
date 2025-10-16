@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:flutter/widgets.dart';
+import 'config.dart';
 
 const List<String> songPaths = [
   "assets/music/1 TO 10.mp3",
@@ -67,8 +68,10 @@ Image songCoverBuild(Song song) {
 
   // on fallback if no bytes found
   if (picture == null) {
-    return Image.asset("assets/images/default-album-cover.png");
+    return Image.asset("assets/images/default-album-cover.jpg");
   }
+
+
   
   // build image asset from bytes found in memory
   // clamp width and height to reduce memory bandwith and load faster
