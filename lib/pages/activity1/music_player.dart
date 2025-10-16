@@ -208,6 +208,7 @@ class MusicPlayerState extends State<Activity1> {
         onPressed: () => Navigator.of(context).pop(),
       ),
       title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Music Player', style: AppTextStyles.title(palette: palette)),
