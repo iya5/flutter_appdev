@@ -128,49 +128,61 @@ class MusicPlayerState extends State<Activity1> {
   }
 
   Widget buildSongMetadata(AppSizes sizes) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: sizes.coverSize,
-          width: sizes.coverSize,
-          child: SongCover(
-            song: player.getCurrentSong(),
-            size: sizes.coverSize,
+    return Container(
+      constraints: const BoxConstraints(minWidth: 200.0),
+      //width: double.infinity,
+      color: Colors.transparent,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: sizes.coverSize,
+            width: sizes.coverSize,
+            child: SongCover(
+              song: player.getCurrentSong(),
+              size: sizes.coverSize,
+            ),
           ),
-        ),
-        SizedBox(height: (sizes.screenHeight * 0.02).clamp(5.0, 15.0)),
-        SongDetails(song: player.getCurrentSong()),
-      ],
+          SizedBox(height: (sizes.screenHeight * 0.02).clamp(5.0, 15.0)),
+          SongDetails(song: player.getCurrentSong()),
+        ],
+      )
     );
   }
 
   Widget buildSongMetadataSmall(AppSizes sizes) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: sizes.smallCoverSize,
-          width: sizes.smallCoverSize,
-          child: SongCover(
-            song: player.getCurrentSong(),
-            size: sizes.smallCoverSize,
+    return Container(
+      constraints: const BoxConstraints(minWidth: 200.0),
+      width: double.infinity,
+      color: Colors.transparent,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: sizes.smallCoverSize,
+            width: sizes.smallCoverSize,
+            child: SongCover(
+              song: player.getCurrentSong(),
+              size: sizes.smallCoverSize,
+            ),
           ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 4),
-              SongDetails(
-                song: player.getCurrentSong()
-              )
-            ],
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 4),
+                SongDetails(
+                  song: player.getCurrentSong()
+                )
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      )
     );
   }
   
@@ -233,106 +245,7 @@ class MusicPlayerState extends State<Activity1> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Flexible(
-                          child: Container(
-                            constraints: const BoxConstraints(minWidth: 200.0),
-                            width: double.infinity,
-                            color: Colors.transparent,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: (isWide)
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        height: sizes.coverSize,
-                                        width: sizes.coverSize,
-                                        child: SongCover(
-                                          song: songs.isNotEmpty
-                                              ? songs[_currentIndex]
-                                              : null,
-                                          size: sizes.coverSize,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                          height: (sizes.screenHeight * 0.02)
-                                              .clamp(5.0, 15.0)),
-                                      SongDetails(
-                                        song: songs.isNotEmpty
-                                            ? songs[_currentIndex]
-                                            : null,
-                                      ),
-                                    ],
-                                  )
-                                : (_showSongList && alwaysShowList)
-                                    ? Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            height: sizes.smallCoverSize,
-                                            width: sizes.smallCoverSize,
-                                            child: SongCover(
-                                              song: songs.isNotEmpty
-                                                  ? songs[_currentIndex]
-                                                  : null,
-                                              size: sizes.smallCoverSize,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 20),
-                                          Expanded(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                const SizedBox(height: 4),
-                                                SongDetails(
-                                                  song: songs.isNotEmpty
-                                                      ? songs[_currentIndex]
-                                                      : null,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            height: sizes.coverSize,
-                                            width: sizes.coverSize,
-                                            child: SongCover(
-                                              song: songs.isNotEmpty
-                                                  ? songs[_currentIndex]
-                                                  : null,
-                                              size: sizes.coverSize,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                              height:
-                                                  (sizes.screenHeight * 0.02)
-                                                      .clamp(5.0, 15.0)),
-                                          SongDetails(
-                                            song: songs.isNotEmpty
-                                                ? songs[_currentIndex]
-                                                : null,
-                                          ),
-                                        ],
-                                      ),
-                                      
-                          ),
-                        ),
-                        if (_showSongList && alwaysShowList && !isWide)
-                          Container(
-                            height: sizes.songListHeight,
-                            color: Colors.transparent,
-                            child: SongListPage(
-                              songs: songs,
-                              onSongTap: _playSong,
-                            ),
-                          ),
-                        const SizedBox(height: 8),
+                          child: MUSIC DETAILS,
                         ),
                       ],
                     ),
