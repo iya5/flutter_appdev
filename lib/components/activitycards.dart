@@ -7,6 +7,7 @@ class ActivityCard extends StatelessWidget {
   final String actTitle, subtitle, cardImage;
   final Color cardColor;
   final Widget Function() activityLink;
+  final ColorPalette palette;
 
   const ActivityCard(
     this.actTitle,
@@ -15,6 +16,7 @@ class ActivityCard extends StatelessWidget {
     this.cardImage,
     this.activityLink, {
     super.key,
+    required this.palette,
   });
 
   @override
@@ -41,7 +43,7 @@ class ActivityCard extends StatelessWidget {
         margin: EdgeInsets.all(cardMargin),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          splashColor:  ColorPalette.splash.withAlpha(30),
+          splashColor: palette.splash.withAlpha(30),
           onTap: () {
             Navigator.push(
               context,
@@ -76,11 +78,11 @@ class ActivityCard extends StatelessWidget {
                     children: [
                       Text(
                         actTitle,
-                        style: AppTextStyles.body,
+                        style: AppTextStyles.body(palette: palette),
                       ),
                       Text(
                         subtitle,
-                        style: AppTextStyles.caption2,
+                        style: AppTextStyles.caption2(palette: palette),
                       ),
                     ],
                   ),

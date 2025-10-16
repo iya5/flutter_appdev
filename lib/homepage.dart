@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_appdev/pages/activity1/music_player.dart';
-import 'package:flutter_appdev/pages/unused%20pages/activity2.dart';
-import 'package:flutter_appdev/pages/unused%20pages/activity3.dart';
-import 'package:flutter_appdev/pages/unused%20pages/activity4.dart';
+import 'package:flutter_appdev/pages/unused_pages/activity2.dart';
+import 'package:flutter_appdev/pages/unused_pages/activity3.dart';
+import 'package:flutter_appdev/pages/unused_pages/activity4.dart';
 import 'package:flutter_appdev/components/activitycards.dart';
 import '/styles/text_styles.dart';
+import '/styles/color_palette.dart';
 
 // https://docs.flutter.dev/ui/adaptive-responsive
 
@@ -13,6 +14,7 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = ColorPalette.dark; 
     const String appTitle = 'lab_home_c';
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -22,10 +24,10 @@ class Homepage extends StatelessWidget {
       ****AppBar***
       *************/
       home: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: palette.background,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          backgroundColor: palette.background,
           toolbarHeight: 200,
           toolbarOpacity: 0.5,
           title: Column(
@@ -57,12 +59,12 @@ class Homepage extends StatelessWidget {
                   children: [
                     Text(
                       'App Development',
-                      style: AppTextStyles.headline,
+                      style: AppTextStyles.headline(palette: palette),
                     ),
                     const SizedBox(height: 15),
                     Text(
                       'C - CS302',
-                      style: AppTextStyles.subtitle,
+                      style: AppTextStyles.subtitle(palette: palette),
                     ),
                   ],
                 ),
@@ -74,8 +76,8 @@ class Homepage extends StatelessWidget {
       // ================= BODY
         body: SafeArea(
           child: Container(
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 0, 0, 0),
+            decoration: BoxDecoration(
+              color: palette.background,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(25),
                 topLeft: Radius.circular(25),
@@ -97,6 +99,7 @@ class Homepage extends StatelessWidget {
                         const Color(0xFFD60017),
                         "assets/images/revefinale.jpg",
                         () => Activity1(),
+                        palette: palette,
                       ),
                       ActivityCard(
                         "Activity 2",
@@ -104,6 +107,7 @@ class Homepage extends StatelessWidget {
                         Colors.purple,
                         "assets/images/bee.jpg",
                         () => Activity2(),
+                        palette: palette,
                       ),
                       ActivityCard(
                         "Activity 3",
@@ -111,6 +115,7 @@ class Homepage extends StatelessWidget {
                         Colors.orange,
                         "assets/images/bee.jpg",
                         () => Activity3(),
+                        palette: palette,
                       ),
                       ActivityCard(
                         "Activity 4",
@@ -118,6 +123,7 @@ class Homepage extends StatelessWidget {
                         Colors.green,
                         "assets/images/bee.jpg",
                         () => Activity4(),
+                        palette: palette,
                       ),
                     ],
                   ),

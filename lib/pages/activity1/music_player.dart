@@ -10,7 +10,7 @@ import 'package:flutter_appdev/pages/activity1/widgets/song_details.dart';
 import 'package:flutter_appdev/styles/text_styles.dart';
 import '/styles/app_sizes.dart';
 import 'song.dart';
-import '/styles/color_palette.dart';
+import 'package:flutter_appdev/styles/color_palette.dart';
 
 class Activity1 extends StatefulWidget {
   const Activity1({super.key});
@@ -26,6 +26,7 @@ class MusicPlayerState extends State<Activity1> {
   late StreamSubscription<void> completionListener;
 
   bool showSongList = false;
+  bool lightMode = false;
 
   @override
   void initState() {
@@ -45,28 +46,24 @@ class MusicPlayerState extends State<Activity1> {
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
     final bool isWide = sizes.screenWidth > 790;
+    final palette = lightMode ? ColorPalette.light : ColorPalette.dark;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+      backgroundColor: palette.background,
       appBar: buildAppBar(),
-      /*
-      body: Center(
-        child: Container(
-          decoration: BoxDecoration(gradient: ColorPalette.musicPlayerGradient),
-          padding: const EdgeInsets.all(10),
-          child: isWide ? buildWideLayout(sizes) : buildNormalLayout(sizes),
-        ),
-      ),
-      */
       body: Center(
         child: Padding(
-          padding: EdgeInsetsGeometry.all(12),
-          child: isWide ? buildWideLayout(sizes) : buildNormalLayout(sizes)), 
-      )
+          padding: const EdgeInsets.all(12),
+          child: isWide
+              ? buildWideLayout(sizes, palette)
+              : buildNormalLayout(sizes, palette),
+        ),
+      ),
     );
   }
 
-  Widget buildWideLayout(AppSizes sizes) {
+
+  Widget buildWideLayout(AppSizes sizes, ColorPalette palette) {
     return Row(
       children: [
         Expanded(
@@ -83,7 +80,7 @@ class MusicPlayerState extends State<Activity1> {
               buildSongCover(sizes),
               //buildSongMetadata(sizes),
               const Spacer(),
-              SongDetails(song: player.getCurrentSong()),
+              SongDetails(song: player.getCurrentSong(), palette: palette),
 
               SizedBox(height: (sizes.screenHeight * 0.02).clamp(10.0, 15.0)),
               buildControls(player, sizes),
@@ -98,19 +95,19 @@ class MusicPlayerState extends State<Activity1> {
   }
 
 
-  Widget buildNormalLayout(AppSizes sizes) {
+  Widget buildNormalLayout(AppSizes sizes, ColorPalette palette) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         const Spacer(),
         (showSongList)
-          ? buildSongMetadataSmall(sizes)
+          ? buildSongMetadataSmall(sizes, palette)
           : buildSongCover(sizes),
         buildSongListSection(sizes),
         if(!showSongList)
         const Spacer(),
         if (!showSongList)
-        SongDetails(song: player.getCurrentSong()),
+        SongDetails(song: player.getCurrentSong(), palette: palette),
 
         SizedBox(height: (sizes.screenHeight * 0.02).clamp(10.0, 15.0)),
         buildControls(player, sizes),
@@ -121,22 +118,22 @@ class MusicPlayerState extends State<Activity1> {
   Widget buildControls(Mp3Player player, AppSizes sizes) {
     final sizes = AppSizes(context);
     final bool isWide = sizes.screenWidth > 790;
+    final palette = lightMode ? ColorPalette.light : ColorPalette.dark;
+
     return Container(
       width: sizes.screenWidth,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(144, 0, 255, 208),
-      ),
-      
       child: Column(
         children: [
-          PlayerControls(player: player, updateParentWidget: () => setState(() {})),
+          PlayerControls(player: player, updateParentWidget: () => setState(() {}), palette: palette),
           SizedBox(height: (sizes.screenHeight * 0.01).clamp(5.0, 15.0)),
           if(!isWide)
           PlayerControlsSecondary(
             showSongList: showSongList,
-            toggleSongList: () { setState(() => showSongList = !showSongList); },
+            lightMode: lightMode,
+            toggleSongList: () => setState(() => showSongList = !showSongList),
+            toggleLightMode: () => setState(() => lightMode = !lightMode), 
+            palette: palette,
           ),
-          
       ],
     ));
   }
@@ -144,10 +141,9 @@ class MusicPlayerState extends State<Activity1> {
   Widget buildSongListSectionWide() {
     return Container(
       height: double.infinity,
-      color: const Color.fromARGB(144, 255, 153, 0),
       child: SongListPage(
         player: player,
-        updateParentWidget: () => setState(() {}),
+        updateParentWidget: () => setState(() {}), lightMode: lightMode,
       ),
     );
   }
@@ -163,7 +159,7 @@ class MusicPlayerState extends State<Activity1> {
   }
 
 
-  Widget buildSongMetadataSmall(AppSizes sizes) {
+  Widget buildSongMetadataSmall(AppSizes sizes, ColorPalette palette) {
     return Container(
       constraints: const BoxConstraints(minWidth: 200.0),
       width: double.infinity,
@@ -186,9 +182,7 @@ class MusicPlayerState extends State<Activity1> {
                   MainAxisAlignment.start,
               children: [
                 const SizedBox(height: 4),
-                SongDetails(
-                  song: player.getCurrentSong()
-                ),
+                SongDetails(song: player.getCurrentSong(), palette: palette),
               ],
             ),
           ),
@@ -202,28 +196,28 @@ class MusicPlayerState extends State<Activity1> {
 
     return Container(
       height: sizes.songListHeight,
-      color: const Color.fromARGB(144, 255, 153, 0),
       child: SongListPage(
         player: player,
-        updateParentWidget: () => setState(() {}),
+        updateParentWidget: () => setState(() {}), lightMode: lightMode,
       ),
     );
   }
 
   PreferredSizeWidget? buildAppBar() {
+    final palette = lightMode ? ColorPalette.light : ColorPalette.dark;
     return AppBar(
       leading: IconButton(
-        icon: const Icon(CupertinoIcons.clear_thick, color: ColorPalette.iconPrimary),
+        icon: Icon(CupertinoIcons.clear_thick, color: palette.iconPrimary),
         onPressed: () => Navigator.of(context).pop(),
       ),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Music Player', style: AppTextStyles.title),
-          Text('Activity 1', style: AppTextStyles.caption),
+          Text('Music Player', style: AppTextStyles.title(palette: palette)),
+          Text('Activity 1', style: AppTextStyles.caption(palette: palette)),
         ],
       ),
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: palette.background,
       toolbarHeight: 70,
       elevation: 0,
     );

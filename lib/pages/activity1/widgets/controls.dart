@@ -17,11 +17,13 @@ String minuteSecondFormatDuration(Duration duration) {
 class PlayerControls extends StatefulWidget {
   final Mp3Player player;
   final VoidCallback updateParentWidget;
+  final ColorPalette palette;
 
   const PlayerControls({
     super.key,
     required this.player,
-    required this.updateParentWidget
+    required this.updateParentWidget,
+    required this.palette,
   });
 
   @override
@@ -33,6 +35,7 @@ class PlayerControlsState extends State<PlayerControls> {
   late StreamSubscription<Duration> positionStream;
   late StreamSubscription<void> completeStream;
   late Mp3Player player;
+  
 
   @override
   void initState() {
@@ -76,45 +79,33 @@ class PlayerControlsState extends State<PlayerControls> {
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(79, 0, 169, 185),
-      ),
-      child: Column(
+    return Column(
       children: [
         buildPlaybackProgress(context),
         SizedBox(height: (sizes.screenHeight * 0.01).clamp(1.0, 28.0)),
         buildPlaybackControls(context),
       ]
-    ));
+    );
   }
   // TODO
   // when in wide mode, text is right next to each other when it shouldn't be
   Widget buildPlaybackProgress(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(102, 41, 128, 0),
-      ),
-      child: Column(
+    return Column(
       children: [
         buildSeekbar(context),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(minuteSecondFormatDuration(player.currentPosition), style: AppTextStyles.caption),
-            Text(minuteSecondFormatDuration(player.getCurrentSong().duration), style: AppTextStyles.caption),
+            Text(minuteSecondFormatDuration(player.currentPosition), style: AppTextStyles.caption(palette: widget.palette)),
+            Text(minuteSecondFormatDuration(player.getCurrentSong().duration), style: AppTextStyles.caption(palette: widget.palette)),
           ],
         )
       ]
-    ));
+    );
   }
 
   Widget buildPlaybackControls(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(121, 67, 0, 174),
-      ),
-      child: Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
         children: [
           buildLoopButton(context),
@@ -135,7 +126,6 @@ class PlayerControlsState extends State<PlayerControls> {
 
           buildShuffleButton(context)
         ],
-      ),
     );
   }
 
@@ -145,8 +135,8 @@ class PlayerControlsState extends State<PlayerControls> {
       : CupertinoIcons.repeat;
 
     Color iconColor = player.looped == loopState.off
-      ? ColorPalette.iconInactive
-      : ColorPalette.iconPrimary;
+      ? widget.palette.iconInactive
+      : widget.palette.iconPrimary;
 
     return IconButton(
       icon: Icon(iconData, color: iconColor),
@@ -162,7 +152,7 @@ class PlayerControlsState extends State<PlayerControls> {
     return IconButton(
       icon: const Icon(CupertinoIcons.backward_fill),
       iconSize: AppIconSizes.moveIcon(context),
-      color: ColorPalette.iconPrimary,
+      color: widget.palette.iconPrimary,
        onPressed: () async {
         await player.prev();
         widget.updateParentWidget();
@@ -178,7 +168,7 @@ class PlayerControlsState extends State<PlayerControls> {
     return IconButton(
       icon: Icon(iconData),
       iconSize: AppIconSizes.playIcon(context),
-      color: ColorPalette.iconPrimary,
+      color: widget.palette.iconPrimary,
       onPressed: () async {
         await player.toggleResumePause();
         setState(() {});
@@ -194,7 +184,7 @@ class PlayerControlsState extends State<PlayerControls> {
         await player.next();
         widget.updateParentWidget();
       },
-      color: ColorPalette.iconPrimary,
+      color: widget.palette.iconPrimary,
     );
   }
 
@@ -203,8 +193,8 @@ class PlayerControlsState extends State<PlayerControls> {
       icon: Icon(
         CupertinoIcons.shuffle,
         color: player.shuffled
-            ? ColorPalette.iconPrimary
-            : ColorPalette.iconInactive,
+            ? widget.palette.iconPrimary
+            : widget.palette.iconInactive,
       ),
       iconSize: AppIconSizes.outerIcon(context),
       onPressed: () async {
@@ -226,9 +216,9 @@ class PlayerControlsState extends State<PlayerControls> {
 
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
-        activeTrackColor: ColorPalette.sliderActive,
-        inactiveTrackColor: ColorPalette.sliderInactive,
-        thumbColor: ColorPalette.sliderActive,
+        activeTrackColor: widget.palette.sliderActive,
+        inactiveTrackColor: widget.palette.sliderInactive,
+        thumbColor: widget.palette.sliderActive,
         overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(40),
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
         overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
@@ -250,12 +240,18 @@ class PlayerControlsState extends State<PlayerControls> {
 
 class PlayerControlsSecondary extends StatelessWidget {
   final bool showSongList;
+  final bool lightMode;
   final VoidCallback toggleSongList;
+  final VoidCallback toggleLightMode;
+  final ColorPalette palette;
 
   const PlayerControlsSecondary({
     super.key,
     required this.showSongList,
+    required this.lightMode,
     required this.toggleSongList,
+    required this.toggleLightMode,
+    required this.palette,
   });
   
 
@@ -263,28 +259,22 @@ class PlayerControlsSecondary extends StatelessWidget {
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
     return Container(
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(124, 123, 217, 0),
-      ),
       height: sizes.bottomControlHeight,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          /*
           IconButton(
             icon: const Icon(CupertinoIcons.moon_stars_fill), 
             iconSize: AppIconSizes.outerIcon(context),
-            onPressed: () {
-              // empty for now
-            },
-            color: ColorPalette.iconInactive, 
-          ),*/
+            onPressed: toggleLightMode,
+            color: lightMode ? palette.iconPrimary : palette.iconInactive, 
+          ),
 
           IconButton(
             icon: const Icon(CupertinoIcons.list_bullet),
             iconSize: AppIconSizes.outerIcon(context),
             onPressed: toggleSongList,
-            color: showSongList ? ColorPalette.iconPrimary : ColorPalette.iconInactive,
+            color: showSongList ? palette.iconPrimary : palette.iconInactive,
           ),
         ],
       ),

@@ -8,10 +8,12 @@ import '/styles/app_sizes.dart';
 class SongListPage extends StatefulWidget {
   final Mp3Player player;
   final VoidCallback updateParentWidget;
+  final bool lightMode;
 
   const SongListPage({
     super.key,
     required this.player,
+    required this.lightMode,
     required this.updateParentWidget,
   });
 
@@ -21,10 +23,11 @@ class SongListPage extends StatefulWidget {
 
 class SongListWidgetState extends State<SongListPage> {
   int? hoveredIndex;
-
+  
   @override
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
+  final palette = widget.lightMode ? ColorPalette.light : ColorPalette.dark;
 
     return ListView.builder(
       itemCount: widget.player.songs.length,
@@ -46,7 +49,7 @@ class SongListWidgetState extends State<SongListPage> {
               padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: hoveredIndex == index
-                      ? ColorPalette.hoveredList
+                      ? palette.hoveredList
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
                 ),
@@ -66,11 +69,11 @@ class SongListWidgetState extends State<SongListPage> {
                       children: [
                         Text(
                           song.title,
-                          style: AppTextStyles.body,
+                          style: AppTextStyles.body(palette: palette),
                         ),
                         Text(
                           song.artist,
-                          style: AppTextStyles.caption,
+                          style: AppTextStyles.caption(palette: palette),
                         ),
                       ],
                     ),
