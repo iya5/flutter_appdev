@@ -34,22 +34,6 @@ class MusicPlayerState extends State<Activity1> {
     player.play(0);
   }
 
-  /* 
-  The garbage collector doesn't force delete the widget immediately,
-  so doing dispose on the listeners isn't enough, it will crash my app.
-
-  AudioPlayer streams (onPositionChanged, onDurationChanged, etc.)
-  keep firing even after the widget is disposed. The object stays around 
-  because the stream listener is still holding a reference.
-
-  When the callback calls setState() on a disposed widget,
-  Flutter throws an error (similar in spirit to a segfault).
-  That’s why the recommended solution is to cancel those listeners in 
-  dispose() and/or guard with if (mounted) before calling setState() to
-  free the widget from gc and stray events.
-
-  subscription (or “listener”) is the link between the stream and callback.
-  */
   @override
   void dispose() {
     print("destroying player");
@@ -60,103 +44,130 @@ class MusicPlayerState extends State<Activity1> {
   @override
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
-    final bool isWide = sizes.screenWidth > 900;
+    final bool isWide = sizes.screenWidth > 790;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(255, 255, 0, 0),
       appBar: buildAppBar(),
-      body: isWide ? buildWideLayout(sizes) : buildNormalLayout(sizes),
+      /*
+      body: Center(
+        child: Container(
+          decoration: BoxDecoration(gradient: ColorPalette.musicPlayerGradient),
+          padding: const EdgeInsets.all(10),
+          child: isWide ? buildWideLayout(sizes) : buildNormalLayout(sizes),
+        ),
+      ),
+      */
+      body: Center(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(12),
+          child: isWide ? buildWideLayout(sizes) : buildNormalLayout(sizes)), 
+      )
     );
   }
 
   Widget buildWideLayout(AppSizes sizes) {
     return Row(
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            buildSongMetadata(sizes),
-            buildControls(player, sizes),
-          ],
+        Expanded(
+          flex: 1,
+          child: Column(
+            
+            //mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // have song metadata
+              // expand downwards sso that controls
+              // take up the bottom of the screen only
+              const Spacer(),
+              buildSongCover(sizes),
+              //buildSongMetadata(sizes),
+              const Spacer(),
+              SongDetails(song: player.getCurrentSong()),
+
+              SizedBox(height: (sizes.screenHeight * 0.02).clamp(10.0, 15.0)),
+              buildControls(player, sizes),
+              const Spacer(),
+            ],
+          ),
         ),
-        buildSongListSectionWide()
-      ]
+        SizedBox(width: (sizes.screenWidth * 0.02).clamp(10.0, 15.0)),
+        Expanded(flex: 1, child: buildSongListSectionWide()),
+      ],
     );
   }
+
 
   Widget buildNormalLayout(AppSizes sizes) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        const Spacer(),
         (showSongList)
           ? buildSongMetadataSmall(sizes)
-          : buildSongMetadata(sizes),
+          : buildSongCover(sizes),
         buildSongListSection(sizes),
+        if(!showSongList)
+        const Spacer(),
+        if (!showSongList)
+        SongDetails(song: player.getCurrentSong()),
+
+        SizedBox(height: (sizes.screenHeight * 0.02).clamp(10.0, 15.0)),
         buildControls(player, sizes),
-        const SizedBox(height: 8),
-    
       ],
     );
   }
 
   Widget buildControls(Mp3Player player, AppSizes sizes) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PlayerControls(player: player, updateParentWidget: () => setState(() {})),
-        SizedBox(height: (sizes.screenHeight * 0.01).clamp(5.0, 15.0)),      
-        PlayerControlsSecondary(
-          showSongList: showSongList,
-          toggleSongList: () { setState(() => showSongList = !showSongList); },
-        ),
+    final sizes = AppSizes(context);
+    final bool isWide = sizes.screenWidth > 790;
+    return Container(
+      width: sizes.screenWidth,
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(144, 0, 255, 208),
+      ),
+      
+      child: Column(
+        children: [
+          PlayerControls(player: player, updateParentWidget: () => setState(() {})),
+          SizedBox(height: (sizes.screenHeight * 0.01).clamp(5.0, 15.0)),
+          if(!isWide)
+          PlayerControlsSecondary(
+            showSongList: showSongList,
+            toggleSongList: () { setState(() => showSongList = !showSongList); },
+          ),
+          
       ],
-    );
+    ));
   }
 
   Widget buildSongListSectionWide() {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        height: double.infinity,
-        color: Colors.transparent,
-        child: SongListPage(
-          player: player,
-          updateParentWidget: () => setState(() {}),
-        ),
+    return Container(
+      height: double.infinity,
+      color: const Color.fromARGB(144, 255, 153, 0),
+      child: SongListPage(
+        player: player,
+        updateParentWidget: () => setState(() {}),
       ),
     );
   }
-
-  Widget buildSongMetadata(AppSizes sizes) {
-    return Container(
-      constraints: const BoxConstraints(minWidth: 200.0),
-      //width: double.infinity,
-      color: Colors.transparent,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: sizes.coverSize,
-            width: sizes.coverSize,
-            child: SongCover(
-              song: player.getCurrentSong(),
-              size: sizes.coverSize,
-            ),
-          ),
-          SizedBox(height: (sizes.screenHeight * 0.02).clamp(5.0, 15.0)),
-          SongDetails(song: player.getCurrentSong()),
-        ],
+  Widget buildSongCover(AppSizes sizes) {
+    return SizedBox(
+      height: sizes.coverSize,
+      width: sizes.coverSize,
+      child: SongCover(
+        song: player.getCurrentSong(),
+        size: sizes.coverSize,
       )
     );
   }
+
 
   Widget buildSongMetadataSmall(AppSizes sizes) {
     return Container(
       constraints: const BoxConstraints(minWidth: 200.0),
       width: double.infinity,
-      color: Colors.transparent,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -177,7 +188,7 @@ class MusicPlayerState extends State<Activity1> {
                 const SizedBox(height: 4),
                 SongDetails(
                   song: player.getCurrentSong()
-                )
+                ),
               ],
             ),
           ),
@@ -191,7 +202,7 @@ class MusicPlayerState extends State<Activity1> {
 
     return Container(
       height: sizes.songListHeight,
-      color: Colors.transparent,
+      color: const Color.fromARGB(144, 255, 153, 0),
       child: SongListPage(
         player: player,
         updateParentWidget: () => setState(() {}),
@@ -212,49 +223,9 @@ class MusicPlayerState extends State<Activity1> {
           Text('Activity 1', style: AppTextStyles.caption),
         ],
       ),
-      backgroundColor: ColorPalette.debugR,
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       toolbarHeight: 70,
       elevation: 0,
     );
   }
 }
-
-  /* TODO
-  REFACTOR ALL OF THIS
-  Widget buildMainPlayer(AppSizes sizes,
-      {required bool alwaysShowList, required bool isWide}) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: ColorPalette.musicPlayerGradient,
-      ),
-      padding: const EdgeInsets.all(10),
-      child: Container(
-        color: Colors.transparent,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                color: Colors.transparent,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(child: Container(color: Colors.transparent)),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: MUSIC DETAILS,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ),
-      ),
-    );
-  }
-  */

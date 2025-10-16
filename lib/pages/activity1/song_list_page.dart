@@ -32,33 +32,13 @@ class SongListWidgetState extends State<SongListPage> {
         final song = widget.player.songs[index];
         
         Widget songCover = SongCover(song: song);
-        /*
-        if (song.metadata.picture != null) {
-          songImage = ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.memory(
-              song.metadata.picture!.bytes,
-              width: sizes.songImageSize,
-              height: sizes.songImageSize,
-              fit: BoxFit.cover,
-            ),
-          );
-        } else {
-          songImage = Container(
-            width: sizes.songImageSize,
-            height: sizes.songImageSize,
-            color: Colors.transparent,
-            child: const Icon(Icons.music_note, color: ColorPalette.iconInactive),
-          );
-        }
-        */
 
         return MouseRegion(
           onEnter: (_) => setState(() => hoveredIndex = index),
           onExit: (_) => setState(() => hoveredIndex = null),
           child: GestureDetector(
-            onTap: () {
-              widget.player.play(index);
+            onTap: () async {
+              await widget.player.play(index);
               widget.updateParentWidget();
             },
             child: Container(
@@ -73,7 +53,12 @@ class SongListWidgetState extends State<SongListPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  songCover,
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: songCover
+                  )
+                  ,
                   SizedBox(width: 10),
                   Expanded(
                     child: Column(

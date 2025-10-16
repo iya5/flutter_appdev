@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appdev/pages/activity1/music_service.dart';
@@ -78,18 +76,26 @@ class PlayerControlsState extends State<PlayerControls> {
   Widget build(BuildContext context) {
     final sizes = AppSizes(context);
 
-    return Column(
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(79, 0, 169, 185),
+      ),
+      child: Column(
       children: [
         buildPlaybackProgress(context),
         SizedBox(height: (sizes.screenHeight * 0.01).clamp(1.0, 28.0)),
         buildPlaybackControls(context),
       ]
-    );
+    ));
   }
   // TODO
   // when in wide mode, text is right next to each other when it shouldn't be
   Widget buildPlaybackProgress(BuildContext context) {
-    return Column(
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(102, 41, 128, 0),
+      ),
+      child: Column(
       children: [
         buildSeekbar(context),
         Row(
@@ -100,31 +106,36 @@ class PlayerControlsState extends State<PlayerControls> {
           ],
         )
       ]
-    );
+    ));
   }
 
   Widget buildPlaybackControls(BuildContext context) {
-    return Row(
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(121, 67, 0, 174),
+      ),
+      child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        buildLoopButton(context),
+        children: [
+          buildLoopButton(context),
 
-        SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
+          SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
 
-        buildPrevButton(context),
+          buildPrevButton(context),
 
-        SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
+          SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
 
-        buildToggleResumePause(context),
+          buildToggleResumePause(context),
 
-        SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
+          SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
 
-        buildNextButton(context),
+          buildNextButton(context),
 
-        SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
+          SizedBox(width: AppIconSizes.sizedBoxIcon(context)),
 
-        buildShuffleButton(context)
-      ],
+          buildShuffleButton(context)
+        ],
+      ),
     );
   }
 
@@ -198,7 +209,8 @@ class PlayerControlsState extends State<PlayerControls> {
       iconSize: AppIconSizes.outerIcon(context),
       onPressed: () async {
         await player.toggleShuffle();
-        setState(() {});
+        //setState(() {});
+        widget.updateParentWidget();
       },
     );
   }
@@ -217,7 +229,7 @@ class PlayerControlsState extends State<PlayerControls> {
         activeTrackColor: ColorPalette.sliderActive,
         inactiveTrackColor: ColorPalette.sliderInactive,
         thumbColor: ColorPalette.sliderActive,
-        overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(32),
+        overlayColor: const Color.fromARGB(255, 255, 255, 255).withAlpha(40),
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
         overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
       ),
@@ -252,13 +264,13 @@ class PlayerControlsSecondary extends StatelessWidget {
     final sizes = AppSizes(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: const Color.fromARGB(124, 123, 217, 0),
       ),
-      
       height: sizes.bottomControlHeight,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          /*
           IconButton(
             icon: const Icon(CupertinoIcons.moon_stars_fill), 
             iconSize: AppIconSizes.outerIcon(context),
@@ -266,7 +278,7 @@ class PlayerControlsSecondary extends StatelessWidget {
               // empty for now
             },
             color: ColorPalette.iconInactive, 
-          ),
+          ),*/
 
           IconButton(
             icon: const Icon(CupertinoIcons.list_bullet),

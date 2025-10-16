@@ -15,27 +15,23 @@ class AppSizes {
   double get coverSize =>
       min(screenWidth * 0.5, screenHeight * 0.5).clamp(100.0, 700.0);
 
-  // Song list scalers
-  static const double _minScalingFactor = 0.01; // x
-  static const double _maxScalingFactor = 0.99; // y
+  // Song list scaling
+  static const _minScale = 0.09;
+  static const _maxScale = 1;
+  static const _minHeight = 450.0;
+  static const _maxHeight = 1300.0;
 
-  static const double _minScreenHeight = 400.0; // a
-  static const double _maxScreenHeight = 1200.0; // b
-
-  double get baseScaling {
-    double scaling = _minScalingFactor +
-        ((screenHeight - _minScreenHeight) / (_maxScreenHeight - _minScreenHeight)) *
-            (_maxScalingFactor - _minScalingFactor);
-
-    return scaling.clamp(_minScalingFactor, _maxScalingFactor);
+  double get _scaleFactor {
+    final ratio = ((screenHeight - _minHeight) / (_maxHeight - _minHeight))
+        .clamp(0.0, 1.0);
+    return _minScale + ratio * (_maxScale - _minScale);
   }
 
-  double get minListHeight => screenHeight * 0.33;
-  double get maxListHeight => screenHeight * 0.58;
+  double get _minListHeight => screenHeight * 0.33;
+  double get _maxListHeight => screenHeight * 0.58;
 
   double get songListHeight =>
-      (screenHeight * baseScaling).clamp(minListHeight, maxListHeight);
-  
+      (screenHeight * _scaleFactor).clamp(_minListHeight, _maxListHeight);
 
   double get minHeightBtmControl => screenHeight * 0.03; 
   double get maxHeightBtmControl => screenHeight * 0.06;
