@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appdev/styles/color_palette.dart';
-import 'package:flutter_appdev/styles/text_styles.dart';
-import 'package:flutter_appdev/pages/activity1/activity1.dart';
-import 'package:flutter_appdev/pages/activity2.dart';
-import 'package:flutter_appdev/pages/activity3.dart';
-import 'package:flutter_appdev/pages/activity4.dart';
+import 'package:flutter_appdev/pages/activity1/music_player.dart';
+import 'package:flutter_appdev/pages/unused_pages/activity2.dart';
+import 'package:flutter_appdev/pages/unused_pages/activity3.dart';
+import 'package:flutter_appdev/pages/unused_pages/activity4.dart';
 import 'package:flutter_appdev/components/activitycards.dart';
+import '/styles/text_styles.dart';
+import '/styles/color_palette.dart';
+
+// https://docs.flutter.dev/ui/adaptive-responsive
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key, required String title});
 
   @override
   Widget build(BuildContext context) {
+    final palette = ColorPalette.dark; 
     const String appTitle = 'lab_home_c';
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -21,10 +24,10 @@ class Homepage extends StatelessWidget {
       ****AppBar***
       *************/
       home: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: palette.background,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          backgroundColor: palette.background,
           toolbarHeight: 200,
           toolbarOpacity: 0.5,
           title: Column(
@@ -53,15 +56,15 @@ class Homepage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       'App Development',
-                      style: AppTextStyles.headline,
+                      style: AppTextStyles.headline(palette: palette),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Text(
                       'C - CS302',
-                      style: AppTextStyles.subtitle,
+                      style: AppTextStyles.subtitle(palette: palette),
                     ),
                   ],
                 ),
@@ -70,60 +73,66 @@ class Homepage extends StatelessWidget {
           ),
         ),
 
-      /************
-      *****BODY****
-      *************/
-        body: Container(
-          decoration: BoxDecoration(
-            color: ColorPalette.background,
-          ),
-          child: Column(
-            children: [
-              Expanded( 
-                child: GridView.extent(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                  maxCrossAxisExtent: 500,
-                  childAspectRatio: 2.0,
-                  crossAxisSpacing: 4,
-                  mainAxisSpacing: 4,
-                  children: [
-                    ActivityCard(
-                      "Music Player",
-                      "activity 1",
-                      Color(0xFFD60017),
-                      "assets/images/revefinale.jpg",
-                      () => Activity1(),
-                    ),
-                    ActivityCard(
-                      "Activity 2",
-                      "wow",
-                      Colors.purple,
-                      "assets/images/bee.jpg",
-                      () => Activity2(),
-                    ),
-                    ActivityCard(
-                      "Activity 3",
-                      "hallaw",
-                      Colors.orange,
-                      "assets/images/bee.jpg",
-                      () => Activity3(),
-                    ),
-                    ActivityCard(
-                      "Activity 4",
-                      "shimi shimi",
-                      Colors.green,
-                      "assets/images/bee.jpg",
-                      () => Activity4(),
-                    ),
-                  ],
-                ),
+      // ================= BODY
+        body: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              color: palette.background,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(25),
+                topLeft: Radius.circular(25),
               ),
-
-            ],
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: GridView.extent(
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    maxCrossAxisExtent: 800,
+                    childAspectRatio: 2.0,
+                    crossAxisSpacing: 4,
+                    mainAxisSpacing: 2,
+                    children: [
+                      ActivityCard(
+                        "Music Player",
+                        "activity 1",
+                        const Color(0xFFD60017),
+                        "assets/images/revefinale.jpg",
+                        () => Activity1(),
+                        palette: palette,
+                      ),
+                      ActivityCard(
+                        "Activity 2",
+                        "wow",
+                        Colors.purple,
+                        "assets/images/bee.jpg",
+                        () => Activity2(),
+                        palette: palette,
+                      ),
+                      ActivityCard(
+                        "Activity 3",
+                        "hallaw",
+                        Colors.orange,
+                        "assets/images/bee.jpg",
+                        () => Activity3(),
+                        palette: palette,
+                      ),
+                      ActivityCard(
+                        "Activity 4",
+                        "shimi shimi",
+                        Colors.green,
+                        "assets/images/bee.jpg",
+                        () => Activity4(),
+                        palette: palette,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-
-
         ),
+
       ),
     );
   }
