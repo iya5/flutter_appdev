@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
 
 class Activity2 extends StatelessWidget {
   const Activity2({super.key});
@@ -10,7 +11,30 @@ class Activity2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dino 8-Bit Game',
-      home: const DinoGame(),
+      home: Scaffold(
+        appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(CupertinoIcons.clear_thick, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Activity 2',
+                    style: TextStyle(color: Colors.white),
+              ),
+              Text('Dino Game',
+                    style: TextStyle(color: Colors.white,fontSize: 14.0, fontStyle: FontStyle.italic),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.purple,
+          toolbarHeight: 80,
+          toolbarOpacity: 0.5,
+        ),
+        body: const DinoGame(),
+        ),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -46,7 +70,7 @@ class _DinoGameState extends State<DinoGame> {
   bool _hasSetScreenSize = false;
 
   // Constants
-  static const double groundHeight = 100;
+  static const double groundHeight = 400;
   static const double playerWidth = 50;
   static const double playerHeight = 50;
   static const double cactusWidth = 50;
@@ -74,7 +98,7 @@ class _DinoGameState extends State<DinoGame> {
       score = 0;
       gameOver = false;
       gameStarted = true;
-      cactusX = 1.5;
+      cactusX = 0;
       playerY = 0;
       velocity = 0;
       isJumping = false;
@@ -103,7 +127,7 @@ class _DinoGameState extends State<DinoGame> {
 
     final cactusRect = Rect.fromCenter(
       center: Offset(
-        screenWidth * (0.5 + cactusX * 0.3),
+        screenWidth * (0.55 + cactusX * 0.3),
         screenHeight - groundHeight / 2 - cactusHeight / 2,
       ),
       width: cactusWidth,
@@ -123,7 +147,7 @@ class _DinoGameState extends State<DinoGame> {
 
       // handle gravity & jump
       if (isJumping || playerY > 0) {
-        velocity -= 0.015; // gravity
+        velocity -= 0.020; // gravity
         playerY += velocity;
         if (playerY <= 0) {
           playerY = 0;

@@ -20,9 +20,7 @@ class Homepage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: appTitle,
 
-      /************
-      ****AppBar***
-      *************/
+      // ---------------------
       home: Scaffold(
         backgroundColor: palette.background,
         appBar: AppBar(
@@ -63,7 +61,7 @@ class Homepage extends StatelessWidget {
                     ),
                     const SizedBox(height: 15),
                     Text(
-                      'C - CS302',
+                      'Cruz, N. - CS302',
                       style: AppTextStyles.subtitle(palette: palette),
                     ),
                   ],
@@ -73,7 +71,6 @@ class Homepage extends StatelessWidget {
           ),
         ),
 
-      // ================= BODY
         body: SafeArea(
           child: Container(
             decoration: BoxDecoration(
@@ -102,8 +99,8 @@ class Homepage extends StatelessWidget {
                         palette: palette,
                       ),
                       ActivityCard(
-                        "Activity 2",
-                        "wow",
+                        "Dino Game",
+                        "activity 2",
                         Colors.purple,
                         "assets/images/bee.jpg",
                         () => Activity2(),
