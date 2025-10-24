@@ -27,20 +27,25 @@ class _DinoGameState extends State<DinoGame> {
   // Player Variables
   double playerY = 0; // player vertical position
   double velocity = 0; // vertical speed
-  bool isJumping = false; 
+  bool isJumping = false;
 
-  // Obstacle Variables 
+  // Obstacle Variables
   double cactusX = 1.5; // cactus horizontal position
 
-  // Game State 
+  // Game State
   int score = 0;
   bool gameOver = false;
-  bool gameStarted = false; 
+  bool gameStarted = false;
   Timer? gameTimer; // main game loop timer
 
   final FocusNode _focusNode = FocusNode(); // for keyboard control
 
-  // Constants for positioning
+  // Cached screen size (to avoid MediaQuery null crash)
+  late double screenWidth;
+  late double screenHeight;
+  bool _hasSetScreenSize = false;
+
+  // Constants
   static const double groundHeight = 100;
   static const double playerWidth = 50;
   static const double playerHeight = 50;
@@ -50,9 +55,13 @@ class _DinoGameState extends State<DinoGame> {
   @override
   void initState() {
     super.initState();
-    // Automatically focus keyboard listener when widget builds
+    // Focus fix: request focus safely after widget is mounted
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).requestFocus(_focusNode);
+      if (mounted) {
+        Future.delayed(const Duration(milliseconds: 50), () {
+          if (mounted) FocusScope.of(context).requestFocus(_focusNode);
+        });
+      }
     });
   }
 
@@ -74,27 +83,28 @@ class _DinoGameState extends State<DinoGame> {
     // start game loop (every 30ms)
     gameTimer?.cancel();
     gameTimer = Timer.periodic(const Duration(milliseconds: 30), (_) {
-      updateGame();
+      if (mounted) updateGame();
     });
   }
 
-  // Collision detection using Rect
+  // Collision detection
   bool checkCollision() {
-    // Get player rect - positioned at bottom of screen with vertical offset
     final playerRect = Rect.fromCenter(
       center: Offset(
-        MediaQuery.of(context).size.width * 0.2, // 20% from left
-        MediaQuery.of(context).size.height - groundHeight / 2 - playerHeight / 2 - playerY * 100,
+        screenWidth * 0.2,
+        screenHeight -
+            groundHeight / 2 -
+            playerHeight / 2 -
+            playerY * 100,
       ),
       width: playerWidth,
       height: playerHeight,
     );
 
-    // Get cactus rect - positioned at bottom of screen
     final cactusRect = Rect.fromCenter(
       center: Offset(
-        MediaQuery.of(context).size.width * (0.5 + cactusX * 0.3), // Adjusted for better collision range
-        MediaQuery.of(context).size.height - groundHeight / 2 - cactusHeight / 2,
+        screenWidth * (0.5 + cactusX * 0.3),
+        screenHeight - groundHeight / 2 - cactusHeight / 2,
       ),
       width: cactusWidth,
       height: cactusHeight,
@@ -113,23 +123,22 @@ class _DinoGameState extends State<DinoGame> {
 
       // handle gravity & jump
       if (isJumping || playerY > 0) {
-        velocity -= 0.015; // gravity pull
+        velocity -= 0.015; // gravity
         playerY += velocity;
         if (playerY <= 0) {
-          // reset when player lands
           playerY = 0;
           isJumping = false;
           velocity = 0;
         }
       }
 
-      // reset cactus position and increase score
+      // reset cactus position & score
       if (cactusX < -1.2) {
         cactusX = 1.5 + Random().nextDouble();
         score++;
       }
 
-      // Collision Detection using Rect
+      // collision check
       if (checkCollision()) {
         gameOver = true;
         gameStarted = false;
@@ -138,32 +147,38 @@ class _DinoGameState extends State<DinoGame> {
     });
   }
 
-  // Jump Action 
+  // Jump Action
   void jump() {
-    // only jump if on the ground and not game over
     if (!isJumping && playerY == 0 && !gameOver) {
       setState(() {
         isJumping = true;
-        velocity = 0.25; // increased jump impulse for better feel
+        velocity = 0.25; // jump impulse
       });
     }
   }
 
   @override
   void dispose() {
-    // stop timer when widget is destroyed
     gameTimer?.cancel();
+    _focusNode.dispose(); // dispose focus node properly
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Cache screen size once
+    if (!_hasSetScreenSize) {
+      screenWidth = MediaQuery.of(context).size.width;
+      screenHeight = MediaQuery.of(context).size.height;
+      _hasSetScreenSize = true;
+    }
+
     return Scaffold(
       body: KeyboardListener(
         focusNode: _focusNode,
         autofocus: true,
         onKeyEvent: (KeyEvent event) {
-          // spacebar to jump or start
+          // spacebar to jump/start
           if (event is KeyDownEvent &&
               event.logicalKey == LogicalKeyboardKey.space) {
             if (!gameStarted || gameOver) {
@@ -174,7 +189,6 @@ class _DinoGameState extends State<DinoGame> {
           }
         },
         child: GestureDetector(
-          // tap anywhere to start or jump
           onTap: () {
             FocusScope.of(context).requestFocus(_focusNode);
             if (!gameStarted || gameOver) {
@@ -185,10 +199,10 @@ class _DinoGameState extends State<DinoGame> {
           },
           child: Stack(
             children: [
-              // Background Sky 
+              // Background Sky
               Container(color: const Color.fromARGB(255, 116, 191, 229)),
 
-              // Ground (fills entire bottom) 
+              // Ground
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -198,10 +212,10 @@ class _DinoGameState extends State<DinoGame> {
                 ),
               ),
 
-              // Cactus (obstacle) - positioned at ground level
+              // Cactus
               Positioned(
-                left: MediaQuery.of(context).size.width * (0.5 + cactusX * 0.3),
-                bottom: groundHeight, // Positioned at top of ground
+                left: screenWidth * (0.5 + cactusX * 0.3),
+                bottom: groundHeight,
                 child: Image.asset(
                   'assets/images/dodge/cactus.png',
                   width: cactusWidth,
@@ -211,10 +225,10 @@ class _DinoGameState extends State<DinoGame> {
                 ),
               ),
 
-              // Player (dino) - positioned at ground level with jump offset
+              // Player
               Positioned(
-                left: MediaQuery.of(context).size.width * 0.2 - playerWidth / 2,
-                bottom: groundHeight + playerY * 100, // Ground level + jump offset
+                left: screenWidth * 0.2 - playerWidth / 2,
+                bottom: groundHeight + playerY * 100,
                 child: Image.asset(
                   'assets/images/dodge/player.png',
                   width: playerWidth,
@@ -224,7 +238,7 @@ class _DinoGameState extends State<DinoGame> {
                 ),
               ),
 
-              // Score Counter 
+              // Score
               Positioned(
                 top: 50,
                 left: 20,
@@ -255,7 +269,6 @@ class _DinoGameState extends State<DinoGame> {
                             style: const TextStyle(
                                 fontSize: 24, color: Colors.white)),
                         const SizedBox(height: 20),
-                        // play icon replaces button
                         IconButton(
                           onPressed: startGame,
                           icon: const Icon(Icons.play_arrow, size: 50),
@@ -266,7 +279,7 @@ class _DinoGameState extends State<DinoGame> {
                   ),
                 ),
 
-              // Start Screen (before first play)
+              // Start Screen
               if (!gameStarted && !gameOver)
                 Container(
                   color: Colors.black54,
