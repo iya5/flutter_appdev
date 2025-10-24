@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_appdev/pages/activity1/music_player.dart';
-import 'package:flutter_appdev/pages/unused_pages/activity2.dart';
+import 'package:flutter_appdev/pages/activity2/activity2.dart';
 import 'package:flutter_appdev/pages/unused_pages/activity3.dart';
 import 'package:flutter_appdev/pages/unused_pages/activity4.dart';
 import 'package:flutter_appdev/components/activitycards.dart';
