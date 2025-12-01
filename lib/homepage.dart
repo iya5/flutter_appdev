@@ -103,7 +103,7 @@ class Homepage extends StatelessWidget {
                         "activity 2",
                         Colors.purple,
                         "assets/images/bee.jpg",
-                        () => Activity2(),
+                        () => GamePage(),
                         palette: palette,
                       ),
                       ActivityCard(
