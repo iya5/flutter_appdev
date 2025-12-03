@@ -6,9 +6,34 @@ import 'sprite.dart';
 
 List<Sprite> dogFrames = [
   Sprite()
-    ..imagePath = "assets/images/game/fiestaDog/fiestaDog.gif"
-    ..imageHeight = 80
-    ..imageWidth = 92,
+    ..imagePath = "assets/images/game/fiestaDog/1.png"
+    ..imageWidth = 92
+    ..imageHeight = 80,
+
+  Sprite()
+    ..imagePath = "assets/images/game/fiestaDog/2.png"
+    ..imageWidth = 92
+    ..imageHeight = 80,
+
+  Sprite()
+    ..imagePath = "assets/images/game/fiestaDog/3.png"
+    ..imageWidth = 92
+    ..imageHeight = 80,
+
+  Sprite()
+    ..imagePath = "assets/images/game/fiestaDog/4.png"
+    ..imageWidth = 92
+    ..imageHeight = 80,
+
+  Sprite()
+    ..imagePath = "assets/images/game/fiestaDog/5.png"
+    ..imageWidth = 92
+    ..imageHeight = 80,
+
+  Sprite()
+    ..imagePath = "assets/images/game/fiestaDog/6.png"
+    ..imageWidth = 92
+    ..imageHeight = 80,
 ];
 
 class Fiestadog extends GameObject {

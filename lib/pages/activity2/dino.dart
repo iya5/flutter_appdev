@@ -5,27 +5,67 @@ import 'game_object.dart';
 import 'sprite.dart';
 
 List<Sprite> dino = [
+  // Idle frames
   Sprite()
-    ..imagePath = "assets/images/game/dino/idle.gif"
-    ..imageWidth = 88
-    ..imageHeight = 94,
+    ..imagePath = "assets/images/game/dino/idle_1.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
   Sprite()
-    ..imagePath = "assets/images/game/dino/walk.gif"
-    ..imageWidth = 88
-    ..imageHeight = 94,
+    ..imagePath = "assets/images/game/dino/idle_2.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+  Sprite()
+    ..imagePath = "assets/images/game/dino/idle_3.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+  Sprite()
+    ..imagePath = "assets/images/game/dino/idle_4.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+
+  // Walk frames
+  Sprite()
+    ..imagePath = "assets/images/game/dino/walk_1.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+  Sprite()
+    ..imagePath = "assets/images/game/dino/walk_2.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+  Sprite()
+    ..imagePath = "assets/images/game/dino/walk_3.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+  Sprite()
+    ..imagePath = "assets/images/game/dino/walk_4.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+  Sprite()
+    ..imagePath = "assets/images/game/dino/walk_5.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+  Sprite()
+    ..imagePath = "assets/images/game/dino/walk_6.png"
+    ..imageWidth = 100
+    ..imageHeight = 100,
+
+  // Jump frame
   Sprite()
     ..imagePath = "assets/images/game/dino/jump.png"
-    ..imageWidth = 88
-    ..imageHeight = 94,
+    ..imageWidth = 100
+    ..imageHeight = 100,
+
+  // death frame
   Sprite()
     ..imagePath = "assets/images/game/dino/dino_5.png"
-    ..imageWidth = 88
-    ..imageHeight = 94,
+    ..imageWidth = 100
+    ..imageHeight = 100,
   Sprite()
     ..imagePath = "assets/images/game/dino/dino_6.png"
-    ..imageWidth = 88
-    ..imageHeight = 94,
+    ..imageWidth = 100
+    ..imageHeight = 100,
 ];
+
 
 enum DinoState {
   jumping,
